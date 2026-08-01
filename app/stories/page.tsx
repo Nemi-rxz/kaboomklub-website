@@ -6,7 +6,7 @@ import { getPosts } from "@/lib/posts";
 
 export const metadata: Metadata = {
   title: "All Stories | KaboomKlub",
-  description: "Browse every KaboomKlub editorial story across entertainment, Afrobeats, lifestyle, and creator tech.",
+  description: "Browse simple KaboomKlub updates across entertainment, Afrobeats, lifestyle, and creator tools.",
 };
 
 export default function StoriesPage() {
@@ -25,7 +25,7 @@ export default function StoriesPage() {
               All Stories
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-[#5c4933]">
-              A clean editorial archive for readers moving between entertainment, Afrobeats, lifestyle, and creator tech.
+              A simple archive for regular KaboomKlub content across entertainment, Afrobeats, lifestyle, and creator tools.
             </p>
           </div>
 

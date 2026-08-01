@@ -4,10 +4,10 @@ import { Post } from "@/types/blog";
 const allPosts = posts as Post[];
 
 export const categories = [
-  { slug: "entertainment", label: "ENTERTAINMENT", description: "Film, celebrity culture, pop moments, and the stories shaping screen-driven audiences." },
-  { slug: "afrobeats", label: "AFROBEATS", description: "African music, artist culture, visuals, and the global movement around the sound." },
-  { slug: "lifestyle", label: "LIFESTYLE", description: "Fashion, travel, beauty, wellness, and the everyday mood of a modern culture blog." },
-  { slug: "tech", label: "TECH", description: "Tools, apps, devices, and creator workflows powering digital publishing and culture." },
+  { slug: "music", label: "MUSIC", description: "Afrobeats, artists, playlists, music moments, and regular update posts." },
+  { slug: "entertainment", label: "ENTERTAINMENT", description: "Events, performances, pop culture, arenas, and entertainment stories." },
+  { slug: "lifestyle", label: "LIFESTYLE", description: "Fashion, culture, city moments, and visual lifestyle updates." },
+  { slug: "services", label: "SERVICES", description: "DJ sets, playlists, publicity, and simple service-focused KaboomKlub updates." },
 ] as const;
 
 export type CategorySlug = (typeof categories)[number]["slug"];

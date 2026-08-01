@@ -20,7 +20,7 @@ export default function EditorialFooter() {
               </span>
             </Link>
             <p className="max-w-xs text-lg font-medium text-[#f7f3ea]/60 leading-relaxed">
-              A bold editorial platform for entertainment, Afrobeats, lifestyle, and the digital tools behind modern culture.
+              KaboomKlub brings together the website and `@kaboomklub` Instagram around entertainment, Afrobeats, lifestyle, and regular culture updates.
             </p>
           </div>
 
@@ -28,10 +28,10 @@ export default function EditorialFooter() {
             <div className="flex flex-col gap-4">
               <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[#f2c14e]">Categories</h4>
               <ul className="flex flex-col gap-3 text-sm font-bold uppercase tracking-widest">
+                <li><Link href="/category/music" className="hover:text-[#b3241b] transition-colors">Music</Link></li>
                 <li><Link href="/category/entertainment" className="hover:text-[#b3241b] transition-colors">Entertainment</Link></li>
-                <li><Link href="/category/afrobeats" className="hover:text-[#b3241b] transition-colors">Afrobeats</Link></li>
                 <li><Link href="/category/lifestyle" className="hover:text-[#b3241b] transition-colors">Lifestyle</Link></li>
-                <li><Link href="/category/tech" className="hover:text-[#b3241b] transition-colors">Tech</Link></li>
+                <li><Link href="/category/services" className="hover:text-[#b3241b] transition-colors">Services</Link></li>
               </ul>
             </div>
             <div className="flex flex-col gap-4">
@@ -44,16 +44,17 @@ export default function EditorialFooter() {
               </ul>
             </div>
             <div className="col-span-2 flex flex-col gap-8 sm:col-span-1">
-              <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[#f2c14e]">Stay Loud</h4>
+              <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[#f2c14e]">Follow</h4>
               <div className="flex flex-col gap-4">
-                <input 
-                  type="email" 
-                  placeholder="EMAIL ADDRESS" 
-                  className="bg-transparent border-b border-[#f7f3ea]/30 py-3 text-sm font-black focus:border-[#b3241b] outline-none transition-all placeholder:text-[#f7f3ea]/20"
-                />
-                <button className="bg-[#b3241b] py-4 text-xs font-black uppercase tracking-widest hover:bg-[#f7f3ea] hover:text-[#17120c] transition-all">
-                  SUBSCRIBE
-                </button>
+                <p className="text-sm leading-relaxed text-[#f7f3ea]/65">
+                  For regular content and updates, follow the main page on Instagram.
+                </p>
+                <Link
+                  href="https://www.instagram.com/kaboomklub/"
+                  className="bg-[#b3241b] py-4 text-center text-xs font-black uppercase tracking-widest transition-all hover:bg-[#f7f3ea] hover:text-[#17120c]"
+                >
+                  OPEN INSTAGRAM
+                </Link>
               </div>
             </div>
           </div>
@@ -68,7 +69,7 @@ export default function EditorialFooter() {
                { label: "IG", href: "https://www.instagram.com/kaboomklub/" },
                { label: "HOME", href: "/" },
                { label: "ALL", href: "/stories" },
-               { label: "AFRO", href: "/category/afrobeats" },
+               { label: "MUSIC", href: "/category/music" },
              ].map((social) => (
                <Link key={social.label} href={social.href} className="text-[10px] font-black hover:text-[#f2c14e] transition-colors">
                  {social.label}

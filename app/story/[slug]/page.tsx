@@ -109,24 +109,12 @@ export default async function StoryPage({ params }: StoryPageProps) {
 
             <article className="space-y-8 text-lg leading-relaxed text-[#2d241a]">
               <p>
-                {post.excerpt} KaboomKlub frames stories like this with a magazine sensibility: bold visuals,
-                clear hierarchy, and a strong editorial voice that works across entertainment, Afrobeats, lifestyle,
-                and creator culture.
+                {post.excerpt} Each story is meant to be simple to read and simple to update, with the website and
+                `@kaboomklub` Instagram supporting the same main content direction.
               </p>
               <p>
-                The redesigned reading experience gives the headline room to breathe, makes the category context
-                instantly visible, and keeps the brand palette and imagery intact while presenting them in a cleaner,
-                more polished, publication-style format.
-              </p>
-              <div className="border-l-4 border-[#b3241b] pl-6">
-                <p className="text-2xl font-black uppercase leading-tight tracking-tight text-[#17120c]">
-                  &quot;A strong culture site depends on rhythm: better contrast, stronger pacing, and smarter entry points
-                  into each story.&quot;
-                </p>
-              </div>
-              <p>
-                That same principle carries through the front page, archive, and category pages, helping KaboomKlub
-                feel less like a placeholder and more like a destination readers can browse with confidence.
+                To keep control easy, the main titles, excerpts, categories, dates, and images are all managed from
+                `data/posts.json`, so regular content can be updated without changing the overall site structure.
               </p>
             </article>
           </div>

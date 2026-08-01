@@ -3,7 +3,7 @@ export interface Post {
   slug: string;
   title: string;
   excerpt: string;
-  category: "ENTERTAINMENT" | "AFROBEATS" | "LIFESTYLE" | "TECH";
+  category: "MUSIC" | "ENTERTAINMENT" | "LIFESTYLE" | "SERVICES";
   categoryColor: string;
   author: string;
   authorRole: string;

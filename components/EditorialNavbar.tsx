@@ -19,7 +19,7 @@ export default function EditorialNavbar() {
         </Link>
 
         <div className="hidden items-center gap-8 md:flex">
-          {["ENTERTAINMENT", "AFROBEATS", "LIFESTYLE", "TECH"].map((cat) => (
+          {["MUSIC", "ENTERTAINMENT", "LIFESTYLE", "SERVICES"].map((cat) => (
             <Link
               key={cat}
               href={`/category/${cat.toLowerCase()}`}
@@ -32,13 +32,13 @@ export default function EditorialNavbar() {
 
         <div className="flex items-center gap-4">
           <span className="hidden text-[10px] font-bold uppercase tracking-[0.1em] text-[#17120c]/40 lg:block">
-            Editorial // Entertainment + Afrobeats + Lifestyle
+            @kaboomklub // Entertainment + Afrobeats + Lifestyle
           </span>
           <Link
-            href="/stories"
+            href="https://www.instagram.com/kaboomklub/"
             className="border border-[#17120c] px-4 py-2 text-xs font-black uppercase tracking-widest transition-all hover:bg-[#17120c] hover:text-[#f7f3ea]"
           >
-            LOUD
+            Instagram
           </Link>
         </div>
       </div>
