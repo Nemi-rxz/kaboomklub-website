@@ -1,0 +1,102 @@
+[
+  {
+    "id": "1",
+    "slug": "brand-design-identity",
+    "title": "BRAND DESIGN & IDENTITY",
+    "description": "Complete brand identity systems for artists, labels, and creative businesses. From logo design to full visual systems that define how you show up across every platform and touchpoint.",
+    "audience": "Artists, Record Labels, Startups, Creative Businesses",
+    "deliverables": ["Brand identity & logo design", "Visual system & brand guidelines", "Brand kit & asset pack", "Color palette & typography system", "Brand strategy consultation"],
+    "ctaLabel": "Get A Quote",
+    "ctaHref": "/contact?service=brand-design"
+  },
+  {
+    "id": "2",
+    "slug": "promotional-content-design",
+    "title": "PROMOTIONAL CONTENT DESIGN",
+    "description": "High-impact visual content for campaigns, releases, and announcements. Social media artwork, promotional graphics, flyers, posters, banners, and campaign assets designed to cut through the noise.",
+    "audience": "Artists, Labels, Event Organizers, Brands",
+    "deliverables": ["Social media artwork & templates", "Promotional graphics & flyers", "Release campaign visuals", "Posters & banner designs", "Digital campaign asset packs"],
+    "ctaLabel": "Request This Service",
+    "ctaHref": "/contact?service=promo-design"
+  },
+  {
+    "id": "3",
+    "slug": "digital-campaign-management",
+    "title": "DIGITAL CAMPAIGN MANAGEMENT",
+    "description": "End-to-end campaign strategy, content creation, execution, and reporting. Built for releases, tours, brand launches, and moments that need coordinated digital attention.",
+    "audience": "Artists, Labels, Brands, Entertainment Companies",
+    "deliverables": ["Campaign strategy & planning", "Content creation & scheduling", "Audience targeting & execution", "Performance tracking & reporting", "Cross-platform coordination"],
+    "ctaLabel": "Book A Service",
+    "ctaHref": "/contact?service=digital-campaigns"
+  },
+  {
+    "id": "4",
+    "slug": "landing-page-website-design",
+    "title": "LANDING PAGE / WEBSITE DESIGN",
+    "description": "Campaign landing pages, event websites, promotional microsites, and business websites. Designed to convert attention into action with fast, responsive, visually sharp digital experiences.",
+    "audience": "Artists, Brands, Events, Startups, Agencies",
+    "deliverables": ["Landing page design & build", "Event / campaign websites", "Promotional microsites", "Mobile-first responsive design", "Analytics & conversion setup"],
+    "ctaLabel": "Get A Quote",
+    "ctaHref": "/contact?service=website-design"
+  },
+  {
+    "id": "5",
+    "slug": "playlist-pitching",
+    "title": "PLAYLIST PITCHING",
+    "description": "Music pitching and placement opportunities through KaboomKlub's playlist ecosystem. Get your music in front of engaged listeners through curated discovery playlists and editorial recommendations.",
+    "audience": "Artists, Labels, Distributors, Managers",
+    "deliverables": ["Playlist review & consideration", "Discovery playlist placement", "Editorial playlist pitching", "Audience fit assessment", "Streaming strategy guidance"],
+    "ctaLabel": "Submit Music",
+    "ctaHref": "/submit"
+  },
+  {
+    "id": "6",
+    "slug": "press-release-announcement",
+    "title": "PRESS RELEASE / ANNOUNCEMENT",
+    "description": "Professional publication and distribution of music, artist, event, brand, and business announcements. Get your story told with editorial credibility and reach across KaboomKlub's media channels.",
+    "audience": "Artists, Labels, PR Agencies, Event Organizers, Brands",
+    "deliverables": ["Press release writing & editing", "Publication on KaboomKlub", "Social media distribution", "Newsletter inclusion", "Media outreach support"],
+    "ctaLabel": "Request A Proposal",
+    "ctaHref": "/contact?service=press-release"
+  },
+  {
+    "id": "7",
+    "slug": "artist-spotlight-features",
+    "title": "ARTIST SPOTLIGHT & FEATURES",
+    "description": "Artist features, profiles, interviews, and promotional editorial opportunities. Be discovered by KaboomKlub's audience through original editorial content designed to build lasting visibility.",
+    "audience": "Artists, Labels, Managers, PR Teams",
+    "deliverables": ["Artist spotlight feature", "Profile writing & publication", "Interview coordination", "Social media promotion", "Newsletter feature"],
+    "ctaLabel": "Work With KaboomKlub",
+    "ctaHref": "/contact?service=artist-spotlight"
+  },
+  {
+    "id": "8",
+    "slug": "collaborations",
+    "title": "COLLABORATIONS",
+    "description": "Artist, brand, and media collaborations built around shared audiences and creative goals. From co-branded content to joint events, KaboomKlub partners with teams that align with the culture.",
+    "audience": "Artists, Brands, Media Companies, Creative Agencies",
+    "deliverables": ["Collaboration strategy", "Co-branded content creation", "Cross-platform activation", "Audience sharing & growth", "Creative partnership management"],
+    "ctaLabel": "Partner With Us",
+    "ctaHref": "/contact?service=collaborations"
+  },
+  {
+    "id": "9",
+    "slug": "sponsored-ads",
+    "title": "SPONSORED ADS",
+    "description": "Targeted promotional advertising across KaboomKlub's media channels. Reach young, culturally engaged African audiences through website placements, social media, newsletter sponsorship, and editorial integration.",
+    "audience": "Brands, Labels, Agencies, Entertainment Companies",
+    "deliverables": ["Sponsored article placement", "Social media ad campaigns", "Newsletter sponsorship", "Website banner placement", "Performance reporting"],
+    "ctaLabel": "Get A Quote",
+    "ctaHref": "/advertise"
+  },
+  {
+    "id": "10",
+    "slug": "audience-growth-strategy",
+    "title": "AUDIENCE GROWTH STRATEGY",
+    "description": "Audience development, engagement optimization, and digital growth strategy for artists and brands looking to build real, engaged communities around their music and content.",
+    "audience": "Artists, Labels, Brands, Startups, Creators",
+    "deliverables": ["Audience analysis & segmentation", "Growth strategy development", "Content strategy & planning", "Engagement optimization", "Platform-specific growth tactics"],
+    "ctaLabel": "Book A Service",
+    "ctaHref": "/contact?service=growth-strategy"
+  }
+]

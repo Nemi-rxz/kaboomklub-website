@@ -1,0 +1,53 @@
+[
+  {
+    "id": "1",
+    "slug": "sarz",
+    "name": "Sarz",
+    "bio": "One of the most influential producers in the Afrobeats space, Sarz has shaped the sound of Nigerian music for over a decade. From classic flips to genre-defining originals, his production work spans collaborations with some of Africa's biggest artists.",
+    "genre": "Afrobeats, Electronic, Production",
+    "location": "Lagos, Nigeria",
+    "image": "/kaboom-logo.jpg",
+    "latestRelease": "Sarz Sessions Vol. 3",
+    "socialLinks": {
+      "instagram": "https://instagram.com/sabormusiq",
+      "spotify": "https://open.spotify.com/artist/sarz",
+      "twitter": "https://twitter.com/beatsbysarz"
+    },
+    "tags": ["Producer", "Afrobeats", "Electronic", "Lagos"],
+    "featured": true
+  },
+  {
+    "id": "2",
+    "slug": "ayra-starr",
+    "name": "Ayra Starr",
+    "bio": "Ayra Starr emerged as one of the defining voices of a new generation of Afrobeats. With a distinctive vocal style and a confident creative presence, she has built a global audience while staying rooted in Nigerian youth culture.",
+    "genre": "Afrobeats, Afropop",
+    "location": "Lagos, Nigeria",
+    "image": "/kaboom-logo.jpg",
+    "latestRelease": "The Year I Turned 21",
+    "socialLinks": {
+      "instagram": "https://instagram.com/ayabornastar",
+      "spotify": "https://open.spotify.com/artist/ayrastarr",
+      "twitter": "https://twitter.com/ayabornastar",
+      "tiktok": "https://tiktok.com/@ayabornastar"
+    },
+    "tags": ["Vocalist", "Afrobeats", "Mavin", "Lagos"],
+    "featured": true
+  },
+  {
+    "id": "3",
+    "slug": "amaarae",
+    "name": "Amaarae",
+    "bio": "Amaarae has carved a distinct lane blending Afropop, alternative R&B, and experimental sounds. Her music connects Ghana, the diaspora, and global alternative audiences with a style that feels effortlessly boundary-crossing.",
+    "genre": "Afropop, Alternative R&B",
+    "location": "Accra, Ghana",
+    "image": "/kaboom-logo.jpg",
+    "latestRelease": "Fountain Baby",
+    "socialLinks": {
+      "instagram": "https://instagram.com/amabornamarae",
+      "spotify": "https://open.spotify.com/artist/amaarae"
+    },
+    "tags": ["Vocalist", "Alternative", "Accra", "Ghana"],
+    "featured": true
+  }
+]

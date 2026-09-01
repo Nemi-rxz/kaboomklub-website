@@ -1,14 +1,27 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f7f3ea;
-  --foreground: #17120c;
+  --kk-bg: #f7f3ea;
+  --kk-bg-alt: #efe6d7;
+  --kk-fg: #17120c;
+  --kk-fg-muted: #5c4933;
+  --kk-red: #b3241b;
+  --kk-gold: #f2c14e;
+  --kk-green: #1a8f6e;
+  --kk-purple: #7c3aed;
+  --kk-orange: #e85d04;
+  --kk-dark: #080b10;
+  --kk-dark-card: #121821;
+  --kk-white: #f7f3ea;
+
+  --background: var(--kk-bg);
+  --foreground: var(--kk-fg);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: "Inter", "Segoe UI", Arial, Helvetica, sans-serif;
+  --font-sans: var(--font-inter, "Inter", "Segoe UI", Arial, Helvetica, sans-serif);
   --font-mono: "Consolas", "Courier New", monospace;
 }
 
@@ -21,6 +34,8 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
   text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 a,
@@ -30,6 +45,136 @@ input {
 }
 
 ::selection {
-  background: #b3241b;
-  color: #f7f3ea;
+  background: var(--kk-red);
+  color: var(--kk-white);
+}
+
+/* ---------- Editorial Typography ---------- */
+.kk-label {
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+}
+
+.kk-section-title {
+  font-size: clamp(1.75rem, 4vw, 3.5rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 0.92;
+}
+
+.kk-headline {
+  font-size: clamp(2rem, 5vw, 4.5rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  line-height: 0.88;
+}
+
+/* ---------- Category Colors ---------- */
+.cat-music { color: var(--kk-red); }
+.cat-entertainment { color: var(--kk-purple); }
+.cat-culture { color: var(--kk-gold); }
+.cat-business { color: var(--kk-green); }
+.cat-features { color: var(--kk-orange); }
+
+.cat-music-bg { background-color: var(--kk-red); }
+.cat-entertainment-bg { background-color: var(--kk-purple); }
+.cat-culture-bg { background-color: var(--kk-gold); }
+.cat-business-bg { background-color: var(--kk-green); }
+.cat-features-bg { background-color: var(--kk-orange); }
+
+/* ---------- Animations ---------- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out both;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.5s ease-out both;
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 3s ease-in-out infinite;
+}
+
+/* ---------- Category Pills (stories page filter) ---------- */
+.cat-pill-music:hover        { background-color: var(--kk-red);    color: var(--kk-white); }
+.cat-pill-entertainment:hover { background-color: var(--kk-purple); color: var(--kk-white); }
+.cat-pill-culture:hover      { background-color: var(--kk-gold);   color: var(--kk-fg); }
+.cat-pill-business:hover     { background-color: var(--kk-green);  color: var(--kk-white); }
+.cat-pill-features:hover     { background-color: var(--kk-orange); color: var(--kk-white); }
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--kk-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--kk-fg);
+  border-radius: 0;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--kk-red);
+}
+
+/* ---------- Utility ---------- */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ---------- Newsletter Input ---------- */
+.newsletter-input::placeholder {
+  color: rgba(247, 243, 234, 0.4);
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+}
+
+/* ---------- Trending Strip Scroll ---------- */
+.trending-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.trending-scroll::-webkit-scrollbar {
+  display: none;
 }

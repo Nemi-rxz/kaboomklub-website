@@ -1,0 +1,38 @@
+[
+  {
+    "id": "1",
+    "slug": "artist-pr-submissions",
+    "title": "ARTIST PR SUBMISSIONS",
+    "organization": "KaboomKlub",
+    "category": "Publicity",
+    "deadline": "Rolling",
+    "location": "Remote",
+    "description": "Independent artists and teams can submit releases and campaign details for publicity consideration.",
+    "href": "/submit",
+    "status": "OPEN"
+  },
+  {
+    "id": "2",
+    "slug": "playlist-consideration",
+    "title": "PLAYLIST CONSIDERATION",
+    "organization": "KaboomKlub",
+    "category": "Playlist",
+    "deadline": "Weekly",
+    "location": "Remote",
+    "description": "Submit new records for playlist review and discovery consideration across KaboomKlub selections.",
+    "href": "/submit",
+    "status": "OPEN"
+  },
+  {
+    "id": "3",
+    "slug": "event-feature-requests",
+    "title": "EVENT FEATURE REQUESTS",
+    "organization": "KaboomKlub",
+    "category": "Events",
+    "deadline": "Rolling",
+    "location": "Africa / Remote",
+    "description": "Promoters and organizers can submit relevant event information for editorial and calendar review.",
+    "href": "/contact?type=events",
+    "status": "OPEN"
+  }
+]

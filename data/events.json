@@ -1,0 +1,26 @@
+[
+  {
+    "id": "1",
+    "slug": "kaboomklub-listening-room",
+    "name": "KABOOMKLUB LISTENING ROOM",
+    "date": "JUNE 14, 2026",
+    "location": "Lagos, Nigeria",
+    "description": "A music-first listening event built around new releases, conversations, and creative community.",
+    "artists": ["Independent Artists", "Guest DJs"],
+    "organizer": "KaboomKlub",
+    "href": "https://www.instagram.com/kaboomklub/",
+    "image": "/kaboom-logo.jpg"
+  },
+  {
+    "id": "2",
+    "slug": "afrobeats-industry-mixer",
+    "name": "AFROBEATS INDUSTRY MIXER",
+    "date": "JULY 03, 2026",
+    "location": "Accra, Ghana",
+    "description": "A networking event for artists, managers, media, and music professionals across the ecosystem.",
+    "artists": ["Music Executives", "Artists", "Media Teams"],
+    "organizer": "KaboomKlub Partners",
+    "href": "https://www.instagram.com/kaboomklub/",
+    "image": "/kaboom-logo.jpg"
+  }
+]

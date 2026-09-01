@@ -1,0 +1,32 @@
+[
+  {
+    "id": "1",
+    "slug": "kaboomklub-weekly",
+    "title": "KABOOMKLUB WEEKLY",
+    "description": "The week in African music, fresh releases, and songs shaping the current conversation.",
+    "platform": "Spotify",
+    "href": "https://open.spotify.com/",
+    "image": "/kaboom-logo.jpg",
+    "cadence": "Updated Weekly"
+  },
+  {
+    "id": "2",
+    "slug": "new-afrobeats-now",
+    "title": "NEW AFROBEATS NOW",
+    "description": "Current Afrobeats picks, emerging artists, and records worth tracking early.",
+    "platform": "Spotify",
+    "href": "https://open.spotify.com/",
+    "image": "/kaboom-logo.jpg",
+    "cadence": "Updated Regularly"
+  },
+  {
+    "id": "3",
+    "slug": "culture-night-drive",
+    "title": "CULTURE NIGHT DRIVE",
+    "description": "A slower playlist mix for late-night listening, reflection, and visual mood.",
+    "platform": "Spotify",
+    "href": "https://open.spotify.com/",
+    "image": "/kaboom-logo.jpg",
+    "cadence": "Monthly Refresh"
+  }
+]
