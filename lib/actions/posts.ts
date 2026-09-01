@@ -3,35 +3,85 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+
 import { connectDB } from "@/lib/db";
-import { PostModel } from "@/lib/models/Post";
+import {
+  ContentFormat,
+  PostModel,
+} from "@/lib/models/Post";
 import { requireSession } from "@/lib/session";
 
 function slugify(s: string) {
-  return s.toLowerCase().replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-").replace(/-+/g, "-");
+  return s
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
 }
 
 function formatDate(d: Date) {
-  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }).toUpperCase();
+  return d
+    .toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    })
+    .toUpperCase();
 }
+
+const contentFormats = [
+  "News",
+  "Feature",
+  "Interview",
+  "Artist Spotlight",
+  "Review",
+  "Explainer",
+  "Deep Dive",
+  "Industry Watch",
+  "Culture Watch",
+  "The Business of Music",
+  "Opinion",
+  "Roundup",
+  "Profile",
+] as const;
 
 const PostSchema = z.object({
   title: z.string().min(1, "Title is required"),
   slug: z.string().optional(),
   excerpt: z.string().default(""),
-  body: z.string().default(""),   // newline-separated paragraphs
-  category: z.enum(["MUSIC", "ENTERTAINMENT", "CULTURE", "BUSINESS", "FEATURES"]),
+  body: z.string().default(""),
+
+  category: z.enum([
+    "MUSIC",
+    "ENTERTAINMENT",
+    "CULTURE",
+    "BUSINESS",
+    "FEATURES",
+  ]),
+
   subcategory: z.string().default(""),
-  contentFormat: z.string().optional(),
+
+  contentFormat: z.enum(contentFormats).optional(),
+
   author: z.string().default("KABOOMKLUB TEAM"),
   authorRole: z.string().default("Editorial Desk"),
   readTime: z.string().default("3 MIN READ"),
   image: z.string().default("/kaboom-logo.jpg"),
   imageCaption: z.string().default(""),
-  priority: z.enum(["MAJOR", "SECONDARY", "SIDEBAR"]).default("SECONDARY"),
+
+  priority: z
+    .enum(["MAJOR", "SECONDARY", "SIDEBAR"])
+    .default("SECONDARY"),
+
   featured: z.string().optional(),
+
   tags: z.string().default(""),
-  status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]).default("DRAFT"),
+
+  status: z
+    .enum(["DRAFT", "PUBLISHED", "ARCHIVED"])
+    .default("DRAFT"),
+
   seoTitle: z.string().default(""),
   seoDescription: z.string().default(""),
   socialImage: z.string().default(""),
@@ -53,12 +103,16 @@ export async function savePostAction(
   const parsed = PostSchema.safeParse(raw);
 
   if (!parsed.success) {
-    return { fieldErrors: parsed.error.flatten().fieldErrors };
+    return {
+      fieldErrors: parsed.error.flatten().fieldErrors,
+    };
   }
 
   const data = parsed.data;
   const now = new Date();
+
   const slug = data.slug?.trim() || slugify(data.title);
+
   const bodyParagraphs = data.body
     .split("\n")
     .map((p) => p.trim())
@@ -78,7 +132,10 @@ export async function savePostAction(
     body: bodyParagraphs,
     category: data.category,
     subcategory: data.subcategory,
-    contentFormat: data.contentFormat || undefined,
+
+    contentFormat:
+      data.contentFormat as ContentFormat | undefined,
+
     categoryColor: categoryColor(data.category),
     author: data.author,
     authorRole: data.authorRole,
@@ -88,47 +145,71 @@ export async function savePostAction(
     image: data.image || "/kaboom-logo.jpg",
     imageCaption: data.imageCaption,
     priority: data.priority,
-    featured: data.featured === "true" || data.featured === "on",
+    featured:
+      data.featured === "true" ||
+      data.featured === "on",
     tags,
     status: data.status,
     seoTitle: data.seoTitle || data.title,
-    seoDescription: data.seoDescription || data.excerpt,
-    socialImage: data.socialImage || data.image || "/kaboom-logo.jpg",
-    publishedAt: data.status === "PUBLISHED" ? now : undefined,
+    seoDescription:
+      data.seoDescription || data.excerpt,
+    socialImage:
+      data.socialImage ||
+      data.image ||
+      "/kaboom-logo.jpg",
+    publishedAt:
+      data.status === "PUBLISHED"
+        ? now
+        : undefined,
   };
 
   if (id && id !== "new") {
     await PostModel.findByIdAndUpdate(id, doc);
   } else {
-    await PostModel.create(doc);
+    await new PostModel(doc).save();
   }
 
   revalidatePath("/");
   revalidatePath("/stories");
   revalidatePath(`/story/${slug}`);
-  revalidatePath(`/category/${data.category.toLowerCase()}`);
+  revalidatePath(
+    `/category/${data.category.toLowerCase()}`
+  );
 
   redirect("/admin/content");
 }
 
-export async function deletePostAction(id: string): Promise<void> {
+export async function deletePostAction(
+  id: string
+): Promise<void> {
   await requireSession();
+
   await connectDB();
+
   await PostModel.findByIdAndDelete(id);
+
   revalidatePath("/");
   revalidatePath("/stories");
 }
 
 export async function togglePostStatusAction(
   id: string,
-  newStatus: "PUBLISHED" | "DRAFT" | "ARCHIVED"
+  newStatus:
+    | "PUBLISHED"
+    | "DRAFT"
+    | "ARCHIVED"
 ): Promise<void> {
   await requireSession();
+
   await connectDB();
+
   await PostModel.findByIdAndUpdate(id, {
     status: newStatus,
-    ...(newStatus === "PUBLISHED" ? { publishedAt: new Date() } : {}),
+    ...(newStatus === "PUBLISHED"
+      ? { publishedAt: new Date() }
+      : {}),
   });
+
   revalidatePath("/");
   revalidatePath("/stories");
 }
@@ -141,5 +222,6 @@ function categoryColor(cat: string): string {
     BUSINESS: "#1a8f6e",
     FEATURES: "#e85d04",
   };
+
   return m[cat] ?? "#b3241b";
 }
