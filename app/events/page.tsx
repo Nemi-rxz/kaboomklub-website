@@ -11,9 +11,9 @@ export const metadata: Metadata = {
     "Concerts, festivals, music events, industry mixers and cultural events across Africa — curated by KaboomKlub.",
 };
 
-export default function EventsPage() {
-  const events = getEvents();
-  const entertainmentPosts = getPostsByCategory("entertainment").slice(0, 3);
+export default async function EventsPage() {
+  const events = await getEvents();
+  const entertainmentPosts = (await getPostsByCategory("entertainment")).slice(0, 3);
 
   return (
     <>

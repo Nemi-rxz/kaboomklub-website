@@ -33,7 +33,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   if (!category) notFound();
 
-  const posts = getPostsByCategory(slug);
+  const posts = await getPostsByCategory(slug);
   const mainPosts = posts.slice(0, 1);
   const gridPosts = posts.slice(1);
 

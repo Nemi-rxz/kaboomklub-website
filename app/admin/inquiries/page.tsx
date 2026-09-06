@@ -1,0 +1,7 @@
+import { connection } from "next/server";
+import { connectDB } from "@/lib/db";
+import { InquiryModel } from "@/lib/models/Inquiry";
+import { requireSession } from "@/lib/session";
+import CrudList from "../shared/CrudList";
+
+export default async function InquiriesPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) { const { q } = await searchParams; await connection(); await requireSession(); await connectDB(); const rows = await InquiryModel.find(q ? { $or: [{ name: { $regex: q, $options: "i" } }, { email: { $regex: q, $options: "i" } }, { company: { $regex: q, $options: "i" } }] } : {}).sort({ createdAt: -1 }).lean(); return <CrudList title="Inquiries" eyebrow="Business Inbox" createHref="/admin/inquiries" editBase="/admin/inquiries" showCreate={false} search={q} rows={rows.map((row) => ({ ...row, name: `${row.name} · ${row.email}`, inquiry: row.service || row.company || "General inquiry", message: row.description.slice(0, 60), created: row.createdAt.toLocaleDateString() })) as unknown as Record<string, unknown>[]} columns={[{ key: "name", label: "Contact" }, { key: "inquiry", label: "Type" }, { key: "message", label: "Message" }, { key: "created", label: "Date" }, { key: "status", label: "Status" }]} />; }

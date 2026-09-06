@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Suspense } from "react";
 import "./globals.css";
 
 const inter = Inter({
@@ -44,7 +45,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`h-full antialiased ${inter.variable}`}>
-      <body className="min-h-full bg-[#f7f3ea] text-[#17120c]">{children}</body>
+      <body className="min-h-full bg-[#f7f3ea] text-[#17120c]"><Suspense fallback={<div className="min-h-screen bg-[#f7f3ea]" />}>{children}</Suspense></body>
     </html>
   );
 }

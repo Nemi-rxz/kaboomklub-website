@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import LogoutButton from "./LogoutButton";
 
 const nav = [
   { href: "/admin", label: "Dashboard", icon: "⊡" },
@@ -72,14 +73,7 @@ export default function AdminSidebar() {
           >
             View Site ↗
           </Link>
-          <form action="/api/admin/logout" method="POST">
-            <button
-              type="submit"
-              className="text-[9px] font-bold uppercase tracking-[0.15em] text-white/30 hover:text-[#b3241b]"
-            >
-              Logout
-            </button>
-          </form>
+          <LogoutButton />
         </div>
       </div>
     </aside>

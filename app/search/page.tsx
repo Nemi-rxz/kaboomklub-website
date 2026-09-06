@@ -11,8 +11,8 @@ export const metadata: Metadata = {
     "Search KaboomKlub — find stories, artists, topics and more across African music, entertainment, culture and business.",
 };
 
-export default function SearchPage() {
-  const allPosts = getPosts();
+export default async function SearchPage() {
+  const allPosts = await getPosts();
 
   return (
     <>

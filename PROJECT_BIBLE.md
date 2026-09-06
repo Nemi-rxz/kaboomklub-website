@@ -54,7 +54,7 @@ The website is the **central digital home**. Social media is the **distribution 
 | Language | TypeScript 5 |
 | React | 19.2.4 |
 | Styling | Tailwind CSS v4 (via `@tailwindcss/postcss`) |
-| CMS | JSON flat-file (`data/*.json`) |
+| CMS | MongoDB / Mongoose admin CMS and public content source; JSON files retained for migration/reference |
 | Fonts | Inter (via next/font/google) |
 | Deployment | Vercel |
 
@@ -278,6 +278,39 @@ All data access is synchronous — flat-file JSON imported at build time.
 
 - **Font:** Inter (loaded via `next/font/google`)
 - **Headlines:** Black weight (900), uppercase, tight tracking (`tracking-tight` or `-0.02em`)
+
+## 9. ADMIN CMS IMPLEMENTATION
+
+### Admin Routes
+
+- `/admin/login` — authenticated admin login.
+- `/admin` — live dashboard counts for stories, artists, playlists, events, videos, subscribers, inquiries, and submissions, plus recent content and quick actions.
+- `/admin/content` — MongoDB post table with search, category/status filters, edit, delete, publish, and unpublish actions.
+- `/admin/content/new` — create story form.
+- `/admin/content/[id]` — edit, publish, unpublish/archive, SEO, tags, category, format, priority, author, and featured-image fields.
+- `/admin/media` — MongoDB media library with upload, search, preview, and delete.
+
+### Authentication and Data
+
+Admin pages and server actions use the existing HTTP-only JWT session and `requireSession()`. Public contact, newsletter, and submission forms use `contactFormAction`, `newsletterSubscribeAction`, and `submitFormAction` with Zod validation and MongoDB persistence. Post, inquiry, submission, subscriber, and media records use Mongoose models in `lib/models`.
+
+### Media System
+
+`/api/upload` requires an admin session, accepts only JPG/PNG/WEBP/GIF images up to 10 MB, uploads through Cloudinary using server-only credentials, stores the returned metadata in `MediaModel`, and returns usable URLs. Cloudinary deletion is performed by the media server action where configured.
+
+### Remaining Work
+
+- Public content routes now read published MongoDB records through `lib/posts.ts`; drafts and archived records are excluded from public queries.
+- The public data layer maps existing Post, Artist, Playlist, Event, Service, Video, and SiteSettings models into the existing public types and page props.
+- Admin publishing updates MongoDB, and public pages use request-time reads with Next.js 16 Suspense/cache-components boundaries rather than build-time JSON snapshots.
+- Public reads fail closed when MongoDB is unavailable: collection pages render empty states and single-record routes resolve as not found; no connection errors or secrets are sent to clients.
+- `data/posts.json`, `data/artists.json`, `data/playlists.json`, `data/events.json`, and `data/services.json` are no longer used by public pages. They remain used by `scripts/migrate.ts` as migration/reference input. `data/opportunities.json` is also retained; the current advertising page uses its own local opportunity copy because no Opportunity MongoDB model exists.
+- The major admin CRUD screens are complete for artists, playlists, events, videos, and services, with MongoDB-backed lists, search, forms, editing, and deletion.
+- Submissions and inquiries now have MongoDB-backed inbox lists, detail views, and protected status updates.
+- Newsletter administration includes subscriber search and status display; `/api/unsubscribe` validates the existing token and persists `UNSUBSCRIBED`.
+- Site settings now load and save the supported `SiteSettings` singleton fields.
+- Cloudinary credentials and MongoDB connection variables must be configured in the deployment environment before live persistence or uploads can run.
+- Existing JSON data files remain in place and have not been removed.
 - **Labels:** 10px, Black weight, uppercase, wide tracking (`0.25em`)
 - **Body:** Regular/Medium, `text-base` / `text-lg`, relaxed leading
 

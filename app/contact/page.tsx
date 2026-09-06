@@ -1,13 +1,10 @@
-import type { Metadata } from "next";
+"use client";
+
+import { useActionState } from "react";
 import Link from "next/link";
 import EditorialFooter from "@/components/EditorialFooter";
 import EditorialNavbar from "@/components/EditorialNavbar";
-
-export const metadata: Metadata = {
-  title: "Contact",
-  description:
-    "Contact KaboomKlub — get a quote, book a service, request a proposal, or reach out for partnerships, advertising and editorial enquiries.",
-};
+import { contactFormAction, type InquiryFormState } from "@/lib/actions/inbox";
 
 const serviceOptions = [
   "Brand Design & Identity",
@@ -36,6 +33,8 @@ const budgetOptions = [
 ];
 
 export default function ContactPage() {
+  const [state, formAction, isPending] = useActionState<InquiryFormState, FormData>(contactFormAction, null);
+
   return (
     <>
       <EditorialNavbar />
@@ -84,7 +83,7 @@ export default function ContactPage() {
                 <h2 className="mt-2 text-3xl font-black uppercase tracking-tight">Tell Us About Your Project</h2>
               </div>
 
-              <form className="space-y-6" action="#" method="POST">
+              <form className="space-y-6" action={formAction}>
                 {/* Name + Company */}
                 <div className="grid gap-5 sm:grid-cols-2">
                   <div>
@@ -213,10 +212,14 @@ export default function ContactPage() {
                   </p>
                   <button
                     type="submit"
+                    disabled={isPending}
                     className="w-full bg-[#17120c] py-4 text-[10px] font-black uppercase tracking-[0.25em] text-[#f7f3ea] transition-all hover:bg-[#b3241b] sm:w-auto sm:px-12"
                   >
-                    Send Enquiry →
+                    {isPending ? "Sending..." : "Send Enquiry →"}
                   </button>
+                  {state?.success && <p className="mt-4 text-sm font-bold text-[#1a8f6e]">Thanks. We&apos;ll be in touch soon.</p>}
+                  {state?.error && <p className="mt-4 text-sm font-bold text-[#b3241b]">{state.error}</p>}
+                  {state?.fieldErrors && <p className="mt-4 text-sm font-bold text-[#b3241b]">Please check the highlighted fields and try again.</p>}
                 </div>
               </form>
             </div>

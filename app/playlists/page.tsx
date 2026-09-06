@@ -20,8 +20,8 @@ const playlistTypes = [
   "Genre Picks",
 ];
 
-export default function PlaylistsPage() {
-  const playlists = getPlaylists();
+export default async function PlaylistsPage() {
+  const playlists = await getPlaylists();
 
   return (
     <>

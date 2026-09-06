@@ -14,8 +14,8 @@ export const metadata: Metadata = {
 
 const subcategories = ["Fashion", "Lifestyle", "Art", "Youth Culture", "Digital Culture", "Identity", "Creative Movements"];
 
-export default function CulturePage() {
-  const posts = getPostsByCategory("culture");
+export default async function CulturePage() {
+  const posts = await getPostsByCategory("culture");
   const featuredPost = posts[0];
   const gridPosts = posts.slice(1);
 

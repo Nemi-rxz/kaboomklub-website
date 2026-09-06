@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import EditorialFooter from "@/components/EditorialFooter";
 import EditorialNavbar from "@/components/EditorialNavbar";
-import { siteConfig, categories } from "@/lib/posts";
+import { getPublicSiteConfig, categories } from "@/lib/posts";
 
 export const metadata: Metadata = {
   title: "About",
@@ -20,7 +20,8 @@ const platforms = [
   { name: "Newsletter", handle: "The Kaboomklub Brief", href: "/newsletter", desc: "Direct-to-inbox coverage of African music, culture, business and entertainment. Free weekly." },
 ];
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const siteConfig = await getPublicSiteConfig();
   return (
     <>
       <EditorialNavbar />

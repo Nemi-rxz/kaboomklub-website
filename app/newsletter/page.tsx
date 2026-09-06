@@ -1,15 +1,9 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import EditorialFooter from "@/components/EditorialFooter";
 import EditorialNavbar from "@/components/EditorialNavbar";
 import PostCard from "@/components/PostCard";
-import { siteConfig, getLatestPosts } from "@/lib/posts";
-
-export const metadata: Metadata = {
-  title: "The Kaboomklub Brief — Newsletter",
-  description:
-    "Subscribe to The Kaboomklub Brief — the weekly newsletter covering African music, entertainment, culture and business. Free. Delivered to your inbox.",
-};
+import { getPublicSiteConfig, getLatestPosts } from "@/lib/posts";
+import NewsletterSignup from "./NewsletterSignup";
 
 const whatWeCover = [
   { label: "Music", desc: "New releases, artist news, Afrobeats, emerging acts and the records shaping the conversation." },
@@ -20,8 +14,9 @@ const whatWeCover = [
   { label: "Features", desc: "Original KaboomKlub editorial — interviews, spotlights, explainers and deep dives." },
 ];
 
-export default function NewsletterPage() {
-  const latestPosts = getLatestPosts(3);
+export default async function NewsletterPage() {
+  const latestPosts = await getLatestPosts(3);
+  const siteConfig = await getPublicSiteConfig();
 
   return (
     <>
@@ -62,42 +57,7 @@ export default function NewsletterPage() {
                 Join the KaboomKlub community and stay on top of African music and culture.
               </p>
 
-              <form className="mt-8 space-y-4" action="#" method="POST">
-                <div>
-                  <label htmlFor="first-name" className="mb-2 block text-[10px] font-black uppercase tracking-[0.2em] text-[#f7f3ea]/40">
-                    First Name
-                  </label>
-                  <input
-                    id="first-name"
-                    name="first_name"
-                    type="text"
-                    placeholder="Your first name"
-                    className="newsletter-input w-full border border-[#f7f3ea]/15 bg-[#17120c] px-4 py-3 text-sm text-[#f7f3ea] outline-none focus:border-[#f2c14e]"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="nl-email" className="mb-2 block text-[10px] font-black uppercase tracking-[0.2em] text-[#f7f3ea]/40">
-                    Email Address <span className="text-[#b3241b]">*</span>
-                  </label>
-                  <input
-                    id="nl-email"
-                    name="email"
-                    type="email"
-                    required
-                    placeholder="your@email.com"
-                    className="newsletter-input w-full border border-[#f7f3ea]/15 bg-[#17120c] px-4 py-3 text-sm text-[#f7f3ea] outline-none focus:border-[#f2c14e]"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="mt-2 w-full bg-[#b3241b] py-4 text-[10px] font-black uppercase tracking-[0.25em] text-[#f7f3ea] transition-all hover:bg-[#f2c14e] hover:text-[#17120c]"
-                >
-                  Subscribe to The Brief →
-                </button>
-                <p className="text-center text-[10px] text-[#f7f3ea]/25">
-                  Free. Unsubscribe anytime. No spam.
-                </p>
-              </form>
+              <NewsletterSignup />
             </div>
           </div>
         </section>

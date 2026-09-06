@@ -22,12 +22,12 @@ const subcategories = [
   "Afrobeats",
 ];
 
-export default function MusicPage() {
-  const posts = getPostsByCategory("music");
+export default async function MusicPage() {
+  const posts = await getPostsByCategory("music");
   const featuredPost = posts[0];
   const gridPosts = posts.slice(1);
-  const playlists = getPlaylists();
-  const featuredArtists = getFeaturedArtists().slice(0, 3);
+  const playlists = await getPlaylists();
+  const featuredArtists = (await getFeaturedArtists()).slice(0, 3);
 
   return (
     <>

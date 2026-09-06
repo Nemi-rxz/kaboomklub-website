@@ -22,11 +22,11 @@ const subcategories = [
   "Industry",
 ];
 
-export default function BusinessPage() {
-  const posts = getPostsByCategory("business");
+export default async function BusinessPage() {
+  const posts = await getPostsByCategory("business");
   const featuredPost = posts[0];
   const gridPosts = posts.slice(1);
-  const businessOfMusicPosts = getPostsByContentFormat("The Business of Music").slice(0, 3);
+  const businessOfMusicPosts = (await getPostsByContentFormat("The Business of Music")).slice(0, 3);
 
   return (
     <>

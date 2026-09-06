@@ -11,13 +11,9 @@ type StoryPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export async function generateStaticParams() {
-  return getPosts().map((post) => ({ slug: post.slug }));
-}
-
 export async function generateMetadata({ params }: StoryPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const post = await getPostBySlug(slug);
 
   if (!post) return { title: "Story | KaboomKlub" };
 
@@ -40,11 +36,11 @@ export async function generateMetadata({ params }: StoryPageProps): Promise<Meta
 
 export default async function StoryPage({ params }: StoryPageProps) {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const post = await getPostBySlug(slug);
 
   if (!post) notFound();
 
-  const relatedPosts = getPostsByCategory(post.category.toLowerCase())
+  const relatedPosts = (await getPostsByCategory(post.category.toLowerCase()))
     .filter((item) => item.slug !== post.slug)
     .slice(0, 3);
 

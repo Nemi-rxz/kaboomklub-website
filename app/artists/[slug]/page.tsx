@@ -10,13 +10,9 @@ type ArtistPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export async function generateStaticParams() {
-  return getArtists().map((artist) => ({ slug: artist.slug }));
-}
-
 export async function generateMetadata({ params }: ArtistPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const artist = getArtistBySlug(slug);
+  const artist = await getArtistBySlug(slug);
   if (!artist) return { title: "Artist | KaboomKlub" };
   return {
     title: `${artist.name} — Artist Profile`,
@@ -27,11 +23,11 @@ export async function generateMetadata({ params }: ArtistPageProps): Promise<Met
 
 export default async function ArtistProfilePage({ params }: ArtistPageProps) {
   const { slug } = await params;
-  const artist = getArtistBySlug(slug);
+  const artist = await getArtistBySlug(slug);
   if (!artist) notFound();
 
   // Get posts that mention the artist by tag or name
-  const relatedPosts = getPosts()
+  const relatedPosts = (await getPosts())
     .filter((p) =>
       p.tags.some((t) => t.toLowerCase().includes(artist.name.toLowerCase())) ||
       p.title.toLowerCase().includes(artist.name.toLowerCase())

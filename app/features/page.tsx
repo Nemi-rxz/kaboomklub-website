@@ -23,13 +23,13 @@ const formats = [
   { label: "Kaboomklub Reviews", format: "Review" },
 ];
 
-export default function FeaturesPage() {
-  const posts = getPostsByCategory("features");
+export default async function FeaturesPage() {
+  const posts = await getPostsByCategory("features");
   const featuredPost = posts[0];
   const gridPosts = posts.slice(1);
 
-  const interviews = getPostsByContentFormat("Interview").slice(0, 3);
-  const explainers = getPostsByContentFormat("Explainer").slice(0, 3);
+  const interviews = (await getPostsByContentFormat("Interview")).slice(0, 3);
+  const explainers = (await getPostsByContentFormat("Explainer")).slice(0, 3);
 
   return (
     <>

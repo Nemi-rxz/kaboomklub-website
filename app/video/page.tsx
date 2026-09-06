@@ -3,7 +3,7 @@ import Link from "next/link";
 import EditorialFooter from "@/components/EditorialFooter";
 import EditorialNavbar from "@/components/EditorialNavbar";
 import PostCard from "@/components/PostCard";
-import { getPostsByContentFormat, getPostsByCategory } from "@/lib/posts";
+import { getPostsByContentFormat, getPostsByCategory, getVideos } from "@/lib/posts";
 
 export const metadata: Metadata = {
   title: "Video",
@@ -22,10 +22,11 @@ const videoFormats = [
   "Industry Conversations",
 ];
 
-export default function VideoPage() {
+export default async function VideoPage() {
   // Surface interview and feature posts as "video-adjacent" editorial content
-  const interviews = getPostsByContentFormat("Interview").slice(0, 3);
-  const featurePosts = getPostsByCategory("features").slice(0, 3);
+  const interviews = (await getPostsByContentFormat("Interview")).slice(0, 3);
+  const featurePosts = (await getPostsByCategory("features")).slice(0, 3);
+  const videos = await getVideos();
 
   return (
     <>
@@ -89,6 +90,13 @@ export default function VideoPage() {
             </div>
           </div>
         </section>
+
+        {videos.length > 0 && (
+          <section className="mx-auto max-w-[1600px] px-6 py-14 sm:px-10 sm:py-16 lg:px-16">
+            <div className="mb-8 border-b border-[#17120c] pb-4"><p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#b3241b]">Published</p><h2 className="mt-2 text-3xl font-black uppercase tracking-tight">Latest Videos</h2></div>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{videos.map((video) => <a key={video.id} href={video.videoUrl || video.embedUrl} target="_blank" rel="noopener noreferrer" className="group border border-[#17120c]/12 p-5 transition-all hover:border-[#17120c] hover:shadow-[4px_4px_0px_0px_rgba(23,18,12,1)]"><div className="aspect-video overflow-hidden bg-[#17120c]"><img src={video.thumbnail} alt={video.title} className="h-full w-full object-cover transition-transform group-hover:scale-105" /></div><p className="mt-4 text-[10px] font-black uppercase tracking-[0.2em] text-[#b3241b]">{video.platform}</p><h3 className="mt-2 text-lg font-black uppercase leading-tight group-hover:text-[#b3241b]">{video.title}</h3><p className="mt-2 line-clamp-2 text-sm text-[#5c4933]">{video.description}</p></a>)}</div>
+          </section>
+        )}
 
         {/* Video-adjacent content */}
         {interviews.length > 0 && (

@@ -11,18 +11,22 @@ import {
   getFeaturedArtists,
   getPostsByCategory,
   getTrendingPosts,
-  siteConfig,
+  getPublicSiteConfig,
 } from "@/lib/posts";
 
-export default function Home() {
-  const featuredPost = getFeaturedPost();
-  const latestPosts = getLatestPosts(9).filter((p) => p.slug !== featuredPost.slug);
-  const trendingPosts = getTrendingPosts(4).filter((p) => p.slug !== featuredPost.slug).slice(0, 4);
-  const musicPosts = getPostsByCategory("music").filter((p) => p.slug !== featuredPost.slug).slice(0, 3);
-  const businessPosts = getPostsByCategory("business").slice(0, 3);
-  const featuresPosts = getPostsByCategory("features").slice(0, 2);
-  const playlists = getPlaylists();
-  const featuredArtists = getFeaturedArtists().slice(0, 3);
+export default async function Home() {
+  const featuredPost = await getFeaturedPost();
+  if (!featuredPost) {
+    return <><EditorialNavbar /><main className="flex min-h-[60vh] items-center justify-center bg-[#f7f3ea] px-6 text-center"><p className="text-lg font-black uppercase text-[#17120c]/40">Stories are coming soon.</p></main><EditorialFooter /></>;
+  }
+  const publicSiteConfig = await getPublicSiteConfig();
+  const latestPosts = (await getLatestPosts(9)).filter((p) => p.slug !== featuredPost.slug);
+  const trendingPosts = (await getTrendingPosts(4)).filter((p) => p.slug !== featuredPost.slug).slice(0, 4);
+  const musicPosts = (await getPostsByCategory("music")).filter((p) => p.slug !== featuredPost.slug).slice(0, 3);
+  const businessPosts = (await getPostsByCategory("business")).slice(0, 3);
+  const featuresPosts = (await getPostsByCategory("features")).slice(0, 2);
+  const playlists = await getPlaylists();
+  const featuredArtists = (await getFeaturedArtists()).slice(0, 3);
 
   return (
     <>
@@ -122,10 +126,10 @@ export default function Home() {
             <div className="mb-10 bg-[#17120c] p-6 text-[#f7f3ea]">
               <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#f2c14e]">Newsletter</p>
               <h3 className="mt-3 text-xl font-black uppercase leading-tight">
-                {siteConfig.newsletterName}
+                {publicSiteConfig.newsletterName}
               </h3>
               <p className="mt-3 text-sm leading-relaxed text-[#f7f3ea]/60">
-                {siteConfig.newsletterDescription}
+                {publicSiteConfig.newsletterDescription}
               </p>
               <Link
                 href="/newsletter"
@@ -282,7 +286,7 @@ export default function Home() {
                   The Kaboomklub Brief
                 </h2>
                 <p className="mt-5 max-w-xl text-base leading-relaxed text-[#5c4933]">
-                  {siteConfig.newsletterDescription} No spam. No noise. Just the stories that matter.
+                  {publicSiteConfig.newsletterDescription} No spam. No noise. Just the stories that matter.
                 </p>
               </div>
               <div className="flex flex-col justify-center gap-4">

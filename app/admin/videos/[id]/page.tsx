@@ -1,0 +1,10 @@
+import { notFound } from "next/navigation";
+import { connection } from "next/server";
+import Link from "next/link";
+import { connectDB } from "@/lib/db";
+import { VideoModel } from "@/lib/models/Video";
+import { saveVideoAction } from "@/lib/actions/videos";
+import { requireSession } from "@/lib/session";
+import CrudForm from "../../shared/CrudForm";
+const fields = [{ name: "title", label: "Title", required: true }, { name: "slug", label: "Slug" }, { name: "description", label: "Description", type: "textarea" as const }, { name: "thumbnail", label: "Thumbnail URL" }, { name: "platform", label: "Platform", type: "select" as const, options: ["YouTube", "Instagram", "TikTok", "Other"] }, { name: "videoUrl", label: "Video URL" }, { name: "embedUrl", label: "Embed URL" }, { name: "category", label: "Category" }, { name: "relatedArtist", label: "Related Artist" }, { name: "status", label: "Status", type: "select" as const, options: ["DRAFT", "PUBLISHED", "ARCHIVED"] }, { name: "featured", label: "Featured", type: "checkbox" as const }];
+export default async function EditVideoPage({ params }: { params: Promise<{ id: string }> }) { const { id } = await params; await connection(); await requireSession(); await connectDB(); const video = await VideoModel.findById(id).lean(); if (!video) notFound(); const values = { title: video.title, slug: video.slug, description: video.description, thumbnail: video.thumbnail, platform: video.platform, videoUrl: video.videoUrl, embedUrl: video.embedUrl, category: video.category, relatedArtist: video.relatedArtist, status: video.status, featured: video.featured }; return <div className="p-8 text-white"><div className="mb-8 flex justify-between"><h1 className="text-3xl font-black uppercase">Edit Video</h1><Link href="/admin/videos" className="text-xs uppercase text-white/50">Back</Link></div><CrudForm id={id} action={saveVideoAction} fields={fields} values={values} submitLabel="Save Video" /></div>; }

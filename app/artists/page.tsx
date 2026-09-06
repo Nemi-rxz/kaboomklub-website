@@ -11,9 +11,9 @@ export const metadata: Metadata = {
     "Discover African artists — emerging voices, established acts, producers and the people shaping African music.",
 };
 
-export default function ArtistsPage() {
-  const artists = getArtists();
-  const discoverPosts = getDiscoverPosts(3);
+export default async function ArtistsPage() {
+  const artists = await getArtists();
+  const discoverPosts = await getDiscoverPosts(3);
 
   return (
     <>

@@ -14,8 +14,8 @@ export const metadata: Metadata = {
 
 const subcategories = ["Nollywood", "Film", "TV & Streaming", "Pop Culture", "Concerts", "Festivals", "Celebrity"];
 
-export default function EntertainmentPage() {
-  const posts = getPostsByCategory("entertainment");
+export default async function EntertainmentPage() {
+  const posts = await getPostsByCategory("entertainment");
   const featuredPost = posts[0];
   const gridPosts = posts.slice(1);
 

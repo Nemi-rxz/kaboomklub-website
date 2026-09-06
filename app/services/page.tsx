@@ -10,8 +10,8 @@ export const metadata: Metadata = {
     "KaboomKlub creative and media services — brand design, campaigns, playlist pitching, press releases, artist features and more for artists, labels and brands.",
 };
 
-export default function ServicesPage() {
-  const services = getServices();
+export default async function ServicesPage() {
+  const services = await getServices();
 
   return (
     <>

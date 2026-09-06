@@ -1,13 +1,10 @@
-import type { Metadata } from "next";
+"use client";
+
+import { useActionState } from "react";
 import Link from "next/link";
 import EditorialFooter from "@/components/EditorialFooter";
 import EditorialNavbar from "@/components/EditorialNavbar";
-
-export const metadata: Metadata = {
-  title: "Submit",
-  description:
-    "Submit music, press releases, artist announcements, events and news to KaboomKlub for editorial consideration.",
-};
+import { submitFormAction, type SubmitFormState } from "@/lib/actions/inbox";
 
 const submissionTypes = [
   {
@@ -55,6 +52,8 @@ const submissionTypes = [
 ];
 
 export default function SubmitPage() {
+  const [state, formAction, isPending] = useActionState<SubmitFormState, FormData>(submitFormAction, null);
+
   return (
     <>
       <EditorialNavbar />
@@ -71,6 +70,43 @@ export default function SubmitPage() {
               Send KaboomKlub your music, press releases, event news, interview requests, and collaboration pitches.
               We review everything and respond to submissions that are a good fit for the platform.
             </p>
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-[1600px] px-6 py-14 sm:px-10 sm:py-16 lg:px-16">
+          <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr]">
+            <div>
+              <div className="mb-8 border-b border-[#17120c] pb-4">
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#b3241b]">Submission Form</p>
+                <h2 className="mt-2 text-3xl font-black uppercase tracking-tight">Send Your Details</h2>
+              </div>
+              <form action={formAction} className="space-y-5">
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <input name="submitterName" required placeholder="Your name *" className="border border-[#17120c]/20 bg-white px-4 py-3 text-sm outline-none focus:border-[#17120c]" />
+                  <input name="artistCompany" placeholder="Artist / company" className="border border-[#17120c]/20 bg-white px-4 py-3 text-sm outline-none focus:border-[#17120c]" />
+                </div>
+                <input name="email" type="email" required placeholder="Email address *" className="w-full border border-[#17120c]/20 bg-white px-4 py-3 text-sm outline-none focus:border-[#17120c]" />
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <select name="type" required defaultValue="" className="border border-[#17120c]/20 bg-white px-4 py-3 text-sm outline-none focus:border-[#17120c]">
+                    <option value="" disabled>Submission type *</option>
+                    {submissionTypes.map((type) => <option key={type.id} value={type.id}>{type.title}</option>)}
+                  </select>
+                  <input name="title" placeholder="Title / subject" className="border border-[#17120c]/20 bg-white px-4 py-3 text-sm outline-none focus:border-[#17120c]" />
+                </div>
+                <textarea name="description" required rows={6} placeholder="Tell us about your submission *" className="w-full resize-y border border-[#17120c]/20 bg-white px-4 py-3 text-sm outline-none focus:border-[#17120c]" />
+                <textarea name="links" rows={3} placeholder="Relevant links (streaming, press kit, socials)" className="w-full resize-y border border-[#17120c]/20 bg-white px-4 py-3 text-sm outline-none focus:border-[#17120c]" />
+                <button type="submit" disabled={isPending} className="bg-[#17120c] px-10 py-4 text-[10px] font-black uppercase tracking-[0.25em] text-[#f7f3ea] transition-colors hover:bg-[#b3241b] disabled:opacity-50">
+                  {isPending ? "Sending..." : "Send Submission ->"}
+                </button>
+                {state?.success && <p className="text-sm font-bold text-[#1a8f6e]">Submission received. Thank you.</p>}
+                {state?.fieldErrors && <p className="text-sm font-bold text-[#b3241b]">Please check the required fields and try again.</p>}
+                {state?.error && <p className="text-sm font-bold text-[#b3241b]">{state.error}</p>}
+              </form>
+            </div>
+            <div className="border border-[#17120c]/12 bg-[#efe6d7] p-7">
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#b3241b]">Good To Know</p>
+              <p className="mt-3 text-sm leading-relaxed text-[#5c4933]">Include a clear title, useful context, and links our editorial team can review. We only use your details to assess this submission.</p>
+            </div>
           </div>
         </section>
 

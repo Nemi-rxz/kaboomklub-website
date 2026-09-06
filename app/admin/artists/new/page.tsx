@@ -1,0 +1,7 @@
+import Link from "next/link";
+import CrudForm from "../../shared/CrudForm";
+import { saveArtistAction } from "@/lib/actions/artists";
+
+const fields = [{ name: "name", label: "Name", required: true }, { name: "slug", label: "Slug" }, { name: "bio", label: "Bio", type: "textarea" as const }, { name: "genre", label: "Genre" }, { name: "location", label: "Location" }, { name: "image", label: "Image URL" }, { name: "latestRelease", label: "Latest Release" }, { name: "instagram", label: "Instagram" }, { name: "spotify", label: "Spotify" }, { name: "youtube", label: "YouTube" }, { name: "twitter", label: "Twitter" }, { name: "tiktok", label: "TikTok" }, { name: "tags", label: "Tags", hint: "Comma-separated" }, { name: "status", label: "Status", type: "select" as const, options: ["DRAFT", "PUBLISHED", "ARCHIVED"] }, { name: "featured", label: "Featured", type: "checkbox" as const }];
+
+export default function NewArtistPage() { return <div className="p-8 text-white"><div className="mb-8 flex justify-between"><h1 className="text-3xl font-black uppercase">New Artist</h1><Link href="/admin/artists" className="text-xs uppercase text-white/50">Back</Link></div><CrudForm id={null} action={saveArtistAction} fields={fields} submitLabel="Save Artist" /></div>; }
