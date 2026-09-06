@@ -2,14 +2,15 @@ import { v2 as cloudinary, type UploadApiResponse } from "cloudinary";
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { MediaModel } from "@/lib/models/Media";
-import { requireSession } from "@/lib/session";
+import { getSession } from "@/lib/session";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const ALLOWED_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
 
 export async function POST(request: Request) {
   try {
-    const session = await requireSession();
+    const session = await getSession();
+    if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     const file = (await request.formData()).get("file");
 
     if (!(file instanceof File)) return NextResponse.json({ error: "A file is required" }, { status: 400 });

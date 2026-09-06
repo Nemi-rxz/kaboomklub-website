@@ -7,7 +7,9 @@
  * The script is idempotent — it uses upsert so it is safe to run multiple times.
  */
 
-import "dotenv/config";
+import dotenv from "dotenv";
+import path from "path";
+dotenv.config({ path: path.resolve(process.cwd(), ".env.local") });
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
