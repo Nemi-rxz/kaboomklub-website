@@ -48,7 +48,10 @@ const PostSchema = new Schema<IPost>(
       enum: ["MUSIC", "ENTERTAINMENT", "CULTURE", "BUSINESS", "FEATURES"],
     },
     subcategory: { type: String, default: "" },
-    contentFormat: { type: String },
+    contentFormat: {
+      type: String,
+      enum: ["News", "Feature", "Interview", "Artist Spotlight", "Review", "Explainer", "Deep Dive", "Industry Watch", "Culture Watch", "The Business of Music", "Opinion", "Roundup", "Profile"],
+    },
     categoryColor: { type: String, default: "#b3241b" },
     author: { type: String, default: "KABOOMKLUB TEAM" },
     authorRole: { type: String, default: "Editorial Desk" },

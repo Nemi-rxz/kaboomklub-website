@@ -133,8 +133,7 @@ export async function savePostAction(
     category: data.category,
     subcategory: data.subcategory,
 
-    contentFormat:
-      data.contentFormat as ContentFormat | undefined,
+    contentFormat: data.contentFormat,
 
     categoryColor: categoryColor(data.category),
     author: data.author,
