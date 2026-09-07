@@ -1,12 +1,12 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Post } from "@/types/blog";
+import PublicImage from "@/components/PublicImage";
 
 export default function MajorHeadline({ post }: { post: Post }) {
   return (
     <section className="grid min-h-[52vh] grid-cols-1 border-b border-[#17120c] lg:grid-cols-[0.95fr_1.05fr]">
       <div className="relative min-h-[300px] overflow-hidden bg-[#17120c] lg:min-h-full">
-        <Image
+        <PublicImage
           src={post.image}
           alt={post.title}
           fill

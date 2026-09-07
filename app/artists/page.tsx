@@ -4,6 +4,7 @@ import EditorialFooter from "@/components/EditorialFooter";
 import EditorialNavbar from "@/components/EditorialNavbar";
 import PostCard from "@/components/PostCard";
 import { getArtists, getDiscoverPosts } from "@/lib/posts";
+import PublicImage from "@/components/PublicImage";
 
 export const metadata: Metadata = {
   title: "Artists",
@@ -58,9 +59,13 @@ export default async function ArtistsPage() {
                   >
                     {/* Artist image / initial block */}
                     <div className="relative flex h-56 items-center justify-center overflow-hidden bg-[#17120c]">
-                      <span className="text-8xl font-black text-[#f7f3ea]/10 transition-all group-hover:text-[#b3241b]/20">
-                        {artist.name[0]}
-                      </span>
+                      {artist.image ? (
+                        <PublicImage src={artist.image} alt={artist.name} fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform group-hover:scale-105" />
+                      ) : (
+                        <span className="text-8xl font-black text-[#f7f3ea]/10 transition-all group-hover:text-[#b3241b]/20">
+                          {artist.name[0]}
+                        </span>
+                      )}
                       {artist.featured && (
                         <span className="absolute right-4 top-4 bg-[#b3241b] px-2 py-1 text-[9px] font-black uppercase tracking-[0.2em] text-[#f7f3ea]">
                           Featured

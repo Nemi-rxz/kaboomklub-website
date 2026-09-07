@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import PublicImage from "@/components/PublicImage";
 import Link from "next/link";
 import EditorialFooter from "@/components/EditorialFooter";
 import EditorialNavbar from "@/components/EditorialNavbar";
@@ -57,6 +58,9 @@ export default async function EventsPage() {
                     {/* Event colour bar */}
                     <div className="h-2 bg-[#f2c14e]" />
                     <div className="flex flex-1 flex-col p-8">
+                        <div className="relative mb-6 aspect-[16/7] overflow-hidden bg-[#17120c]">
+                          <PublicImage src={event.image} alt={event.name} fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
+                        </div>
                       <div className="flex items-start justify-between gap-4">
                         <div>
                           <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#f2c14e]">

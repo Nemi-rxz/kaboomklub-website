@@ -304,6 +304,7 @@ Admin pages and server actions use the existing HTTP-only JWT session and `requi
 - The public data layer maps existing Post, Artist, Playlist, Event, Service, Video, and SiteSettings models into the existing public types and page props.
 - Admin publishing updates MongoDB, and public pages use request-time reads with Next.js 16 Suspense/cache-components boundaries rather than build-time JSON snapshots.
 - Public reads fail closed when MongoDB is unavailable: collection pages render empty states and single-record routes resolve as not found; no connection errors or secrets are sent to clients.
+- Public CMS media uses `components/PublicImage.tsx`, which preserves Cloudinary URLs, supplies a local fallback for missing image fields, and provides a default responsive `sizes` value for `next/image`. Cloudinary is allowlisted through `next.config.ts` for Vercel image optimization.
 - `data/posts.json`, `data/artists.json`, `data/playlists.json`, `data/events.json`, and `data/services.json` are no longer used by public pages. They remain used by `scripts/migrate.ts` as migration/reference input. `data/opportunities.json` is also retained; the current advertising page uses its own local opportunity copy because no Opportunity MongoDB model exists.
 - The major admin CRUD screens are complete for artists, playlists, events, videos, and services, with MongoDB-backed lists, search, forms, editing, and deletion.
 - Submissions and inquiries now have MongoDB-backed inbox lists, detail views, and protected status updates.

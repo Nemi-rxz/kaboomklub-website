@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Post } from "@/types/blog";
+import PublicImage from "@/components/PublicImage";
 
 export default function PostCard({ post, horizontal = false }: { post: Post, horizontal?: boolean }) {
   if (horizontal) {
@@ -8,7 +8,7 @@ export default function PostCard({ post, horizontal = false }: { post: Post, hor
       <Link href={`/story/${post.slug}`} className="group block">
         <article className="flex gap-4 border-b border-[#17120c]/10 py-6 last:border-0">
           <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-sm bg-[#17120c]">
-            <Image
+            <PublicImage
               src={post.image}
               alt={post.title}
               fill
@@ -35,7 +35,7 @@ export default function PostCard({ post, horizontal = false }: { post: Post, hor
     <Link href={`/story/${post.slug}`} className="group flex flex-col overflow-hidden border border-[#17120c]/15 bg-[#17120c] transition-all hover:border-[#17120c] hover:shadow-[8px_8px_0px_0px_rgba(23,18,12,1)]">
       <article className="flex h-full flex-col">
         <div className="relative aspect-[4/5] overflow-hidden bg-[#17120c]">
-          <Image
+          <PublicImage
             src={post.image}
             alt={post.title}
             fill

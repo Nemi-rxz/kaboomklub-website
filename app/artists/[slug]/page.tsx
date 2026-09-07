@@ -5,6 +5,7 @@ import EditorialFooter from "@/components/EditorialFooter";
 import EditorialNavbar from "@/components/EditorialNavbar";
 import PostCard from "@/components/PostCard";
 import { getArtistBySlug, getArtists, getPosts } from "@/lib/posts";
+import PublicImage from "@/components/PublicImage";
 
 type ArtistPageProps = {
   params: Promise<{ slug: string }>;
@@ -94,9 +95,14 @@ export default async function ArtistProfilePage({ params }: ArtistPageProps) {
 
             {/* Right: artist visual */}
             <div className="relative flex min-h-[320px] items-center justify-center bg-gradient-to-br from-[#b3241b]/20 to-[#080b10] lg:min-h-full">
-              <span className="text-[200px] font-black leading-none text-[#f7f3ea]/5 select-none">
-                {artist.name[0]}
-              </span>
+              {artist.image ? (
+                <PublicImage src={artist.image} alt={artist.name} fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover opacity-90" priority />
+              ) : (
+                <span className="text-[200px] font-black leading-none text-[#f7f3ea]/5 select-none">
+                  {artist.name[0]}
+                </span>
+              )}
+              {artist.image && <div className="absolute inset-0 bg-[#080b10]/20" />}
               <div className="absolute bottom-8 left-8 right-8">
                 <div className="flex flex-wrap gap-2">
                   {artist.tags.map((tag) => (

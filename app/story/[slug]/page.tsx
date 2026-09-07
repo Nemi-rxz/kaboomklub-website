@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import EditorialFooter from "@/components/EditorialFooter";
 import EditorialNavbar from "@/components/EditorialNavbar";
 import PostCard from "@/components/PostCard";
 import { getPostBySlug, getPosts, getPostsByCategory } from "@/lib/posts";
+import PublicImage from "@/components/PublicImage";
 
 type StoryPageProps = {
   params: Promise<{ slug: string }>;
@@ -112,7 +112,7 @@ export default async function StoryPage({ params }: StoryPageProps) {
 
             {/* Right: image */}
             <div className="relative min-h-[320px] bg-[#17120c] lg:min-h-full">
-              <Image
+              <PublicImage
                 src={post.image}
                 alt={post.title}
                 fill
