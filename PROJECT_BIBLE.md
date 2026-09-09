@@ -1,6 +1,6 @@
 # KABOOMKLUB PROJECT BIBLE
 
-> The source of truth for the Kaboomklub website project — existing structure, new direction, implementation decisions, and development status.
+> The source of truth for the Kaboomklub website project — architecture, routes, CMS, media, auth, data, SEO, analytics, security, performance, deployment, and launch checklist.
 
 ---
 
@@ -18,14 +18,11 @@ Kaboomklub is a modern African digital media platform. Music is the strongest id
 - Business (music business, creative economy, startups, entrepreneurship)
 - Features (original editorial: interviews, spotlights, explainers, deep dives)
 
-**Company note:** Kaboomklub is a media platform powered by Fish Art X.  
-**Collaboration:** Kaboomklub × 9JA Lifestyle partnership retained where relevant.
+**Company note:** Kaboomklub is a media platform powered by Fish Art X.
 
 ---
 
 ## 2. STRATEGIC DIRECTION
-
-### Social Media vs Website
 
 | Instagram / TikTok / Social | Website (kaboomklub.com) |
 |---|---|
@@ -48,22 +45,26 @@ The website is the **central digital home**. Social media is the **distribution 
 
 ## 3. TECH STACK
 
-| Item | Version |
+| Item | Version / Detail |
 |---|---|
-| Framework | Next.js 16.2.6 (App Router) |
-| Language | TypeScript 5 |
+| Framework | Next.js 16.2.6 (App Router, Turbopack) |
+| Language | TypeScript 5 (strict) |
 | React | 19.2.4 |
-| Styling | Tailwind CSS v4 (via `@tailwindcss/postcss`) |
-| CMS | MongoDB / Mongoose admin CMS and public content source; JSON files retained for migration/reference |
-| Fonts | Inter (via next/font/google) |
-| Deployment | Vercel |
+| Styling | Tailwind CSS v4 (`@tailwindcss/postcss`) |
+| CMS / DB | MongoDB Atlas + Mongoose 9 |
+| Auth | JWT via `jose` (cookie `kk_admin_session`, 7d) |
+| Media / CDN | Cloudinary v2 (folder `kaboomklub`) |
+| Deployment | Vercel (auto-deploy on push) |
+| Image optimizer | Next/Image (allowlist: `res.cloudinary.com`) |
+| Fonts | Inter (next/font/google) |
+| Validation | Zod v4 server-side validation |
+| Analytics | GA4 conditional via `NEXT_PUBLIC_GA_MEASUREMENT_ID` |
 
-**Key Next.js 16 conventions used:**
-- All page `params` are `Promise<{...}>` — must be `await`-ed
-- `PageProps<'/route/[slug]'>` helper type available globally
-- `use cache` directive available for caching (not used — flat-file data is already static)
-- `cacheComponents: true` in `next.config.ts`
-- All components are Server Components by default — Client Components require `'use client'` directive
+**Key Next.js 16 conventions:**
+- All page `params` are `Promise<{...}>` and must be awaited
+- `cacheComponents: true` in `next.config.ts` — use `<Suspense>` boundaries for async data reads in universal layouts/pages
+- All components are Server Components by default; Client Components use `"use client"`
+- Route Handlers + Server Actions in `app/api/**` and `lib/actions/**`
 
 ---
 
@@ -72,85 +73,84 @@ The website is the **central digital home**. Social media is the **distribution 
 ```
 kaboomklub-app/
 ├── app/
-│   ├── layout.tsx                  # Root layout (metadata, Inter font)
-│   ├── page.tsx                    # Homepage
-│   ├── globals.css                 # Tailwind v4 + design tokens
-│   ├── favicon.ico
-│   ├── stories/page.tsx            # All stories archive
-│   ├── story/[slug]/page.tsx       # Individual story page (renders body[])
-│   ├── category/[slug]/page.tsx    # Category listing page
-│   ├── music/page.tsx              # Music section
-│   ├── entertainment/page.tsx      # Entertainment section
-│   ├── culture/page.tsx            # Culture section
-│   ├── business/page.tsx           # Business section
-│   ├── features/page.tsx           # Features section
-│   ├── playlists/page.tsx          # Playlists
-│   ├── artists/
-│   │   ├── page.tsx                # Artists listing
-│   │   └── [slug]/page.tsx         # Artist profile
-│   ├── events/page.tsx             # Events
-│   ├── video/page.tsx              # Video / Multimedia
-│   ├── services/page.tsx           # Services (no prices)
-│   ├── advertise/page.tsx          # Advertise / Partner
-│   ├── submit/page.tsx             # Submissions
-│   ├── contact/page.tsx            # Contact / Inquiry form
-│   ├── newsletter/page.tsx         # The Kaboomklub Brief signup
-│   ├── about/page.tsx              # About + Media Kit
-│   └── search/page.tsx             # Search
+│   ├── layout.tsx                  # Root layout — metadata + Inter + Organization JSON-LD + GA4
+│   ├── page.tsx                  # Homepage (Website JSON-LD + SearchAction)
+│   ├── globals.css               # Tailwind v4 + design tokens
+│   ├── robots.ts                 # robots.txt (allow + /sitemap.xml link + /admin disallow
+│   ├── sitemap.ts                # sitemap.xml (static + category + published story/artist/playlist/event/video
+│   ├── stories/page.tsx
+│   ├── story/[slug]/page.tsx       # Story page + NewsArticle JSON-LD
+│   ├── category/[slug]/page.tsx
+│   ├── music/ entertainment/ culture/ business/ features/
+│   ├── playlists/page.tsx
+│   ├── artists/ page.tsx + [slug]/page.tsx
+│   ├── events/page.tsx          # Events + EventList JSON-LD
+│   ├── video/page.tsx + videos page (both routes)
+│   ├── services/ advertise/ submit/ contact/ newsletter/ about/ search/
+│   ├── api/
+│   │   ├── upload/route.ts        # Computer upload → Cloudinary → Media record
+│   │   ├── media/
+│   │   │   ├── route.ts        # GET paginated media list (for MediaSelector
+│   │   │   └── import/route.ts   # POST SSRF-guarded Internet → Cloudinary → Media
+│   │   └── unsubscribe/route.ts
+│   └── admin/
+│       ├── login
+│       ├── dashboard (/admin)
+│       ├── content (stories (list + new + [id])
+│       ├── media (page + MediaUploader + MediaSelector)
+│       ├── artists playlists events videos services + (new + [id])
+│       ├── inquiries submissions newsletter (inboxes)
+│       ├── settings (logo/favicon/defaultSocialImage via MediaSelector)
+│       └── shared/CrudForm.tsx (type:image + MediaSelector)
 ├── components/
-│   ├── EditorialNavbar.tsx         # Main navigation (all categories + mobile)
-│   ├── EditorialFooter.tsx         # Full footer (Fish Art X, social links)
-│   ├── MajorHeadline.tsx           # Featured story hero component
-│   └── PostCard.tsx                # Story card (vertical & horizontal)
+│   ├── PublicImage.tsx             # Cloudinary-safe renderer + unoptimized for externals
+│   ├── EditorialNavbar / Footer / MajorHeadline / PostCard
+│   ├── admin/
+│   │   └── MediaSelector.tsx     # 5-mode picker: Library / Upload / Import URL / External / None
+│   └── seo/ (4 JSON-LD helpers: OrganizationLd / WebsiteLd / NewsArticleLd / EventListLd
 ├── lib/
-│   └── posts.ts                    # Data access layer + siteConfig + nav
-├── data/
-│   ├── posts.json                  # 15 editorial posts
-│   ├── services.json               # 10 services (no prices)
-│   ├── playlists.json              # 3 playlists
-│   ├── events.json                 # 2 events
-│   ├── opportunities.json          # 3 opportunities
-│   └── artists.json                # 3 artists
-├── types/
-│   ├── blog.ts                     # Post interface + types
-│   └── platform.ts                 # Playlist, Service, EventItem, Opportunity, Artist
-├── public/
-│   ├── kaboom-logo.jpg
-│   └── bat.jpg
-├── package.json
-├── tsconfig.json
-├── next.config.ts
-├── postcss.config.mjs
-└── eslint.config.mjs
+│   ├── posts.ts                # Public data access layer + siteConfig + nav
+│   ├── db.ts                   # connectDB() singleton
+│   ├── auth.ts / session handling
+│   ├── cloudinary.ts            # Cloudinary SDK singleton + helpers
+│   ├── actions/              # Server actions: posts / artists / playlists / events / videos / media / services / submissions / inquiries / newsletter / settings
+│   └── models/                 # Mongoose schemas: Post / Artist / Playlist / Event / Video / Service / Subscriber / Inquiry / Submission / SiteSettings / Media / AdminUser
+├── types/ (blog.ts / platform.ts)
+├── scripts/migrate.ts              # seed + JSON→Mongo migration (seed admin)
+├── middleware.ts                 # Edge-level /admin:* and /api/admin:* gate
+├── next.config.ts / postcss.config.mjs / tsconfig.json / eslint.config.mjs
+└── .env.local.example             # Example env vars template
 ```
 
 ---
 
 ## 5. ROUTES
 
+### Public
+
 | Route | Status | Description |
 |---|---|---|
-| `/` | ✅ Live | Editorial media homepage |
+| `/` | ✅ Live | Homepage + Website/SearchAction JSON-LD |
 | `/stories` | ✅ Live | All stories archive |
-| `/story/[slug]` | ✅ Live | Individual story (renders body[]) |
+| `/story/[slug]` | ✅ Live | Individual story + NewsArticle JSON-LD |
 | `/category/[slug]` | ✅ Live | Category listing |
-| `/music` | ✅ Live | Music section page |
-| `/entertainment` | ✅ Live | Entertainment section page |
-| `/culture` | ✅ Live | Culture section page |
-| `/business` | ✅ Live | Business section page |
-| `/features` | ✅ Live | Features section page |
-| `/playlists` | ✅ Live | Playlists page |
-| `/artists` | ✅ Live | Artists listing |
-| `/artists/[slug]` | ✅ Live | Individual artist profile |
-| `/events` | ✅ Live | Events page |
-| `/video` | ✅ Live | Video / multimedia |
-| `/services` | ✅ Live | Services (professional, no prices) |
-| `/advertise` | ✅ Live | Advertise / Partner page |
-| `/submit` | ✅ Live | Submissions page |
-| `/contact` | ✅ Live | Contact / Inquiry |
-| `/newsletter` | ✅ Live | The Kaboomklub Brief |
-| `/about` | ✅ Live | About + Media Kit |
-| `/search` | ✅ Live | Search |
+| `/music` `/entertainment` `/culture` `/business` `/features` | ✅ Live | Section pages |
+| `/playlists` | ✅ Live | Playlist listing |
+| `/artists` + `/artists/[slug]` | ✅ Live | Artists + profiles |
+| `/events` | ✅ Live | Events + EventList JSON-LD |
+| `/video` `/videos` | ✅ Live | Video section (both) |
+| `/services` `/advertise` `/submit` `/contact` `/newsletter` `/about` `/search` | ✅ Live | Commercial & utilities |
+
+### API / ADMIN & API
+
+| Route | Auth | Description |
+|---|---|---|
+| `/admin/login` | public | Admin login |
+| `/admin/*` | JWT session | Dashboard, CRUD, inboxes, settings, media |
+| `/api/upload` | JWT session | Computer → Cloudinary → Media record |
+| `/api/media` | JWT session | GET paginated + search (for MediaSelector |
+| `/api/media/import` | JWT session | Internet URL import with SSRF guard + size + type |
+| `/api/unsubscribe` | public token | Newsletter unsubscribe |
 
 ---
 
@@ -158,310 +158,259 @@ kaboomklub-app/
 
 ### Primary Content Pillars
 
-1. **MUSIC** — `#b3241b` red — Music news, new releases, artist stories, Afrobeats, discovery, music business
-2. **ENTERTAINMENT** — `#7c3aed` purple — Nollywood, film, TV, streaming, pop culture, events, concerts
-3. **CULTURE** — `#f2c14e` gold — African culture, fashion, lifestyle, youth culture, digital trends
-4. **BUSINESS** — `#1a8f6e` green — Music business, creative economy, startups, tech, creator economy
-5. **FEATURES** — `#e85d04` orange — Original editorial: interviews, spotlights, explainers, deep dives
+1. **MUSIC** — `#b3241b`
+2. **ENTERTAINMENT** — `#7c3aed`
+3. **CULTURE** — `#f2c14e`
+4. **BUSINESS** — `#1a8f6e`
+5. **FEATURES** — `#e85d04`
 
-### Content Formats (Original Media Franchises)
+### Content Formats
 
-| Format | Description |
-|---|---|
-| Kaboomklub Interviews | Conversations with artists, creatives, executives |
-| Artist Spotlight | Dedicated artist features |
-| Kaboomklub Explains | Accessible explainers on music, business, tech, culture |
-| The Business of Music | Recurring series on music economics and industry |
-| Culture Watch | Emerging cultural movements and trends |
-| Industry Watch | Entertainment and media industry analysis |
-| Kaboomklub Reviews | Music, film, and entertainment reviews |
-| Deep Dive | Long-form journalism and analysis |
-| Kaboomklub Sessions | Performance and session content |
+Interviews, Artist Spotlight, Explains, The Business of Music, Culture Watch, Industry Watch, Reviews, Deep Dive, Sessions (performance), plus general News / Feature / Review / Explainer / Profile.
 
-### Post Data Model (`types/blog.ts`)
+### Data Models
 
-```typescript
-interface Post {
-  id: string
-  slug: string
-  title: string
-  excerpt: string
-  category: "MUSIC" | "ENTERTAINMENT" | "CULTURE" | "BUSINESS" | "FEATURES"
-  subcategory: string
-  contentFormat?: "News" | "Feature" | "Interview" | "Artist Spotlight" | "Review" |
-    "Explainer" | "Deep Dive" | "Industry Watch" | "Culture Watch" |
-    "The Business of Music" | "Opinion" | "Roundup" | "Profile"
-  categoryColor: string
-  author: string
-  authorRole: string
-  date: string
-  updatedDate: string
-  readTime: string
-  image: string
-  imageCaption: string
-  priority: "MAJOR" | "SECONDARY" | "SIDEBAR"
-  featured: boolean  // only one post should have featured: true
-  tags: string[]
-  body: string[]     // array of paragraphs rendered in story page
-  seoTitle: string
-  seoDescription: string
-  socialImage: string
-}
-```
+All in `lib/models/*`:
 
-### Artist Data Model (`types/platform.ts`)
-
-```typescript
-interface Artist {
-  id: string
-  slug: string
-  name: string
-  bio: string
-  genre: string
-  location: string
-  image: string
-  latestRelease?: string
-  socialLinks: { instagram?, spotify?, youtube?, twitter?, tiktok? }
-  tags: string[]
-  featured: boolean
-}
-```
+- **Post (Post** — id slug title excerpt category subcategory contentFormat categoryColor author authorRole date updatedDate readTime image imageCaption priority featured tags body[] seoTitle seoDescription socialImage status publishedAt
+- **Artist** — slug name bio genre location image latestRelease socialLinks tags featured status
+- **Playlist** — slug title description platform href image cadence featured status
+- **Event** — slug name date location description artists organizer href image featured status
+- **Video** — slug title description thumbnail platform videoUrl embedUrl category relatedArtist featured status
+- **Media** — url publicId folder width height bytes format tags uploadedBy uploadedAt title alt createdAt
+- **SiteSettings** (singleton) — siteName tagline shortDescription logoUrl faviconUrl contact emails phone whatsapp social social social URLs siteUrl SEO defaults newsletter name/description
+- **AdminUser** — email name passwordHash role (superadmin/editor)
+- **Subscriber Inquiry Submission Service** — as existing
 
 ---
 
 ## 7. DATA ACCESS LAYER (`lib/posts.ts`)
 
-All data access is synchronous — flat-file JSON imported at build time.
+Public reads go through `lib/posts.ts`, which uses published MongoDB/lean) with Mongoose models filtered `find({ status: "PUBLISHED" })`. Fallback behaviour when Mongo unavailable → all queries return safe empty states and pages show gracefully. JSON files in `data/` are reference/input for `scripts/migrate.ts` and no longer drive public pages.
 
-### Exports
-
-**Config:**
-- `siteConfig` — name, tagline, handle, baseUrl, newsletterName, newsletterDescription, mission, companyNote
-- `mainNav` — navigation items array
-- `categories` — 5 categories with slug, label, color, description
-- `socialLinks` — Instagram, TikTok, X, YouTube, Spotify
-
-**Post functions:** `getPosts`, `getFeaturedPost`, `getPostsByPriority`, `getPostsByCategory`, `getLatestPosts`, `getPostBySlug`, `getCategoryMeta`, `getPostsByContentFormat`, `getTrendingPosts`, `getDiscoverPosts`, `getSearchDocuments`
-
-**Platform functions:** `getPlaylists`, `getServices`, `getServiceBySlug`, `getEvents`, `getOpportunities`, `getArtists`, `getFeaturedArtists`, `getArtistBySlug`
-
----
-
-## 8. DESIGN SYSTEM
-
-### Color Tokens (`app/globals.css`)
-
-```css
---kk-bg:           #f7f3ea     /* Warm cream — main background */
---kk-bg-alt:       #efe6d7     /* Darker cream — section backgrounds */
---kk-fg:           #17120c     /* Deep brown-black — primary text */
---kk-fg-muted:     #5c4933     /* Secondary text */
---kk-red:          #b3241b     /* Primary accent — MUSIC category */
---kk-gold:         #f2c14e     /* Secondary accent — CULTURE category */
---kk-green:        #1a8f6e     /* BUSINESS category */
---kk-purple:       #7c3aed     /* ENTERTAINMENT category */
---kk-orange:       #e85d04     /* FEATURES category */
---kk-dark:         #080b10     /* Hero section background */
---kk-dark-card:    #121821     /* Dark card background */
---kk-white:        #f7f3ea     /* Light text on dark backgrounds */
+```
+getPosts / getFeaturedPost / getPostsByPriority / getPostsByCategory /
+getLatestPosts / getPostBySlug / getPostsByContentFormat / getTrendingPosts / getDiscoverPosts / getSearchDocuments / getCategoryMeta /
+getPlaylists / getServices / getServiceBySlug / getEvents / getArtists / getFeaturedArtists / getArtistBySlug / getVideos / getPublicSiteConfig / getSiteSettings
 ```
 
-### Category Color Classes (in globals.css)
+---
 
-- `.cat-music` / `.cat-music-bg` → `#b3241b`
-- `.cat-entertainment` / `.cat-entertainment-bg` → `#7c3aed`
-- `.cat-culture` / `.cat-culture-bg` → `#f2c14e`
-- `.cat-business` / `.cat-business-bg` → `#1a8f6e`
-- `.cat-features` / `.cat-features-bg` → `#e85d04`
+## 8. CMS IMPLEMENTATION
 
-### Typography
+### Authentication
+- Edge `middleware.ts` gate for `/admin/*` and `/api/admin/*` verifies JWT before the route executes
+- Additional `requireSession()` called first in every protected server component / server action / route handler
+- Cookie `kk_admin_session` 604 800s httpOnly sameSite=lax secure=prod, JWT payload `{userId email name role superadmin/editor}
 
-- **Font:** Inter (loaded via `next/font/google`)
-- **Headlines:** Black weight (900), uppercase, tight tracking (`tracking-tight` or `-0.02em`)
+### Admin Pages
 
-## 9. ADMIN CMS IMPLEMENTATION
+- **Dashboard** counts + recent content
+- **Content (Stories)**: list search category/status filters edit delete publish toggle
+- **Artists / Playlists / Events / Videos / Services**: each has list + new + edit via `CrudForm.tsx` extended with `type:image` → MediaSelector 5 modes
+- **Media Library**: paginated (24/page newest first + search tags + Prev/Next
+- **Inboxes**: inquiries submissions newsletter lists + detail views
+- **Settings**: logo/favicon/default social images now use MediaSelector instead of URL text paste
 
-### Admin Routes
+### Server Actions
 
-- `/admin/login` — authenticated admin login.
-- `/admin` — live dashboard counts for stories, artists, playlists, events, videos, subscribers, inquiries, and submissions, plus recent content and quick actions.
-- `/admin/content` — MongoDB post table with search, category/status filters, edit, delete, publish, and unpublish actions.
-- `/admin/content/new` — create story form.
-- `/admin/content/[id]` — edit, publish, unpublish/archive, SEO, tags, category, format, priority, author, and featured-image fields.
-- `/admin/media` — MongoDB media library with upload, search, preview, and delete.
-
-### Authentication and Data
-
-Admin pages and server actions use the existing HTTP-only JWT session and `requireSession()`. Public contact, newsletter, and submission forms use `contactFormAction`, `newsletterSubscribeAction`, and `submitFormAction` with Zod validation and MongoDB persistence. Post, inquiry, submission, subscriber, and media records use Mongoose models in `lib/models`.
-
-### Media System
-
-`/api/upload` requires an admin session, accepts only JPG/PNG/WEBP/GIF images up to 10 MB, uploads through Cloudinary using server-only credentials, stores the returned metadata in `MediaModel`, and returns usable URLs. Cloudinary deletion is performed by the media server action where configured.
-
-### Remaining Work
-
-- Public content routes now read published MongoDB records through `lib/posts.ts`; drafts and archived records are excluded from public queries.
-- The public data layer maps existing Post, Artist, Playlist, Event, Service, Video, and SiteSettings models into the existing public types and page props.
-- Admin publishing updates MongoDB, and public pages use request-time reads with Next.js 16 Suspense/cache-components boundaries rather than build-time JSON snapshots.
-- Public reads fail closed when MongoDB is unavailable: collection pages render empty states and single-record routes resolve as not found; no connection errors or secrets are sent to clients.
-- Public CMS media uses `components/PublicImage.tsx`, which preserves Cloudinary URLs, supplies a local fallback for missing image fields, and provides a default responsive `sizes` value for `next/image`. Cloudinary is allowlisted through `next.config.ts` for Vercel image optimization.
-- `data/posts.json`, `data/artists.json`, `data/playlists.json`, `data/events.json`, and `data/services.json` are no longer used by public pages. They remain used by `scripts/migrate.ts` as migration/reference input. `data/opportunities.json` is also retained; the current advertising page uses its own local opportunity copy because no Opportunity MongoDB model exists.
-- The major admin CRUD screens are complete for artists, playlists, events, videos, and services, with MongoDB-backed lists, search, forms, editing, and deletion.
-- Submissions and inquiries now have MongoDB-backed inbox lists, detail views, and protected status updates.
-- Newsletter administration includes subscriber search and status display; `/api/unsubscribe` validates the existing token and persists `UNSUBSCRIBED`.
-- Site settings now load and save the supported `SiteSettings` singleton fields.
-- Cloudinary credentials and MongoDB connection variables must be configured in the deployment environment before live persistence or uploads can run.
-- Existing JSON data files remain in place and have not been removed.
-- **Labels:** 10px, Black weight, uppercase, wide tracking (`0.25em`)
-- **Body:** Regular/Medium, `text-base` / `text-lg`, relaxed leading
-
-### Utility Classes
-
-- `.kk-label` — 10px, 900 weight, uppercase, 0.25em tracking
-- `.kk-section-title` — clamp(1.75rem, 4vw, 3.5rem), 900 weight, uppercase
-- `.kk-headline` — clamp(2rem, 5vw, 4.5rem), 900 weight, uppercase
-- `.line-clamp-2` / `.line-clamp-3` — text truncation
-- `.newsletter-input` — styled placeholder for newsletter inputs
-- `.trending-scroll` — hidden scrollbar for horizontal scroll strips
-- `.animate-fade-in-up` / `.animate-slide-in-left` / `.animate-pulse-subtle`
+`lib/actions/*.ts` with `use server; zod validation; `next/cache revalidatePath + redirect
 
 ---
 
-## 9. COMMERCIAL ARCHITECTURE
+## 9. MEDIA SYSTEM (5 MODES)
 
-### Services (10 services, no prices)
+Core workflow preserved: `Computer upload → Cloudinary → MongoDB Media → Media Library`
 
-All services direct to inquiry forms — no fixed pricing displayed publicly.
+### 1 Computer upload (/api/upload/route.ts) + existing working uploader
+- JPG/PNG/WEBP/GIF ≤10 MB; optional comma-separated `tags` field; multipart form;
+- `requireSession → Cloudinary upload_stream via singleton `lib/cloudinary.ts`; MongoDB Media metadata + tags + dimensions/bytes/format/uploadedBy
+- Cloudinary folder `kaboomklub`; thumbnail transform `c_fill,w_480,h_320
 
-1. Brand Design & Identity → `/contact?service=brand-design`
-2. Promotional Content Design → `/contact?service=promo-design`
-3. Digital Campaign Management → `/contact?service=digital-campaigns`
-4. Landing Page / Website Design → `/contact?service=website-design`
-5. Playlist Pitching → `/submit`
-6. Press Release / Announcement → `/contact?service=press-release`
-7. Artist Spotlight & Features → `/contact?service=artist-spotlight`
-8. Collaborations → `/contact?service=collaborations`
-9. Sponsored Ads → `/advertise`
-10. Audience Growth Strategy → `/contact?service=growth-strategy`
+### 2 Media Library choose (app/admin/media + `app/api/media/route.ts
+- Paginated: page + q search newest-first limit cap 100)
+- Prev/Next pagination links; "Showing X–Y of Z; tags card caption
+- Media card thumbnail URLs
 
-**CTA language used:** "Get A Quote", "Request This Service", "Book A Service", "Work With Kaboomklub", "Partner With Us", "Request A Proposal", "Submit Music"
+### 3 Import from Internet `app/api/media/import/route.ts server action `importFromUrlAction`
+- Require session → parse URL http/https only; validate; `isPrivateHost` blocks RFC1918/loopback/localhost/.local/.internal/CGNAT/IPv6 ::1/ULA/link-local → 20MB size limit; post-upload size cleanup destroy when exceeded; Cloudinary url upload; Media record; revalidate /admin/media; ext allowlist; mime check
 
-**Pricing language:** "Pricing is tailored to the scope and requirements of each project." / "Contact us to discuss your campaign and receive a tailored proposal."
+### 4 External URL
+- MediaSelector mode: editor pastes URL + preview; rendered with unoptimized next/image because external; external URLs never hit Next/image whitelist only allows Cloudinary only; `PublicImage unoptimized for nonCloudinary
 
-### Advertise / Partner Page (`/advertise`)
+### 5 No Image
+- Schemas + actions zod defaults use image/thumbnail=""
+- PublicImage renders local fallback at display time (logo fallback never in DB never forces unless hideFallback true renders null)
 
-Targets brands, record labels, PR agencies, entertainment companies. Shows advertising/partnership opportunities — no fixed rates. CTA: "Request A Media Proposal" → `/contact?type=advertise`.
+### MediaSelector (`components/admin/MediaSelector.tsx
+5-mode client component):
+Library browse select/confirm/preview/clear, Upload with tags, Import URL with tags, External URL with preview/Use as external, Clear/No Image. Writes `<input type="hidden" name={name}>` for FormData; compatible with existing server actions (action signatures unchanged). Works with: Stories featured & social, Artist image / Event image / Playlist cover / Video thumbnail / Site settings logo favicon default social
 
-### Submissions (`/submit`)
-
-Allows artists, labels, PR agencies, brands, event organizers to submit music, press releases, artist announcements, events, news, interview requests, collaboration requests.
-
----
-
-## 10. NEWSLETTER
-
-**Name:** The Kaboomklub Brief
-
-**Coverage:** Music, entertainment, culture, business, new artists, new music, industry stories.
-
-**Purpose:** Direct audience ownership outside social media algorithms.
+### Media Deletion Security (Phase 2 fix)
+- `deleteMediaAction: requireSession → load → verify ownership/role → if uploadedBy empty not bypass only superadmin only allowed orphan destroy Cloudinary destroy try/catch; delete DB record; revalidate
 
 ---
 
-## 11. FISH ART X & 9JA LIFESTYLE
+## 10. DESIGN SYSTEM
 
-- **Fish Art X** — parent company. Mentioned in footer and about page only. Kaboomklub identity dominates.
-- **9JA Lifestyle** — existing collaboration partner, referenced where relevant (footer, about).
+Colors globals.css
 
----
+```
+--kk-bg        #f7f3ea   warm cream
+--kk-bg-alt    #efe6d7
+--kk-fg        #17120c   deep brown-black
+--kk-red        #b3241b   MUSIC accent
+--kk-gold       #f2c14e   CULTURE accent
+--kk-green      #1a8f6e   BUSINESS
+--kk-purple     #7c3aed ENTERTAINMENT
+--kk-orange     #e85d04 FEATURES
+--kk-dark        #080b10 hero bg
+```
 
-## 12. NAVIGATION STRUCTURE
-
-### Main Nav
-Home | Music | Entertainment | Culture | Business | Features | Playlists | Artists | Events | Video
-
-### Secondary/Footer Nav
-Stories | About | Services | Advertise | Submit | Contact | Newsletter | Search
-
----
-
-## 13. IMPLEMENTATION STATUS
-
-### Completed ✅
-- [x] PROJECT_BIBLE updated (this document)
-- [x] `layout.tsx` — Inter font via next/font/google, metadata with OG/Twitter, keywords, metadataBase
-- [x] `globals.css` — category pill hover classes added; font variable wired to --font-inter
-- [x] `EditorialNavbar` — client component, 9 primary nav items, secondary strip, mobile hamburger menu, newsletter CTA, search icon
-- [x] `EditorialFooter` — new categories, social links (Instagram/TikTok/X/YouTube/Spotify), Work With Us column, Fish Art X copyright
-- [x] Homepage (`app/page.tsx`) — hero, trending strip, category nav, latest+sidebar, music section, artist discovery, features+business columns, newsletter band, services CTA
-- [x] Story page — renders `body[]` paragraphs, SEO metadata, tags, content format badge, share links, related posts
-- [x] Category page — large header with category colour accent, lead post, grid, category cross-links, `next/image` for lead
-- [x] Stories archive — updated copy, CSS-only category filter pills, post count
-- [x] `/music` — dark hero, MajorHeadline, grid, artist discovery, playlists strip, submit CTA
-- [x] `/entertainment` — dark hero, MajorHeadline, grid, events CTA
-- [x] `/culture` — dark hero, MajorHeadline, grid, Culture Watch promo
-- [x] `/business` — dark hero, MajorHeadline, Business of Music series, grid, services CTA
-- [x] `/features` — dark hero, MajorHeadline, Interviews section, Explains section, pitch CTA
-- [x] `/playlists` — Spotify playlist cards, submit music CTA
-- [x] `/artists` — artist cards (bio/genre/location/tags), discovery posts, submit/spotlight CTAs
-- [x] `/artists/[slug]` — artist profile: bio, social links, KaboomKlub coverage, feature CTA
-- [x] `/events` — event cards (date/location/artists/organizer), entertainment stories, host CTA
-- [x] `/video` — YouTube/Instagram CTAs, interviews, features, video collaboration CTA
-- [x] `/services` — 10 services (no prices), 4-step process, professional quote CTAs
-- [x] `/advertise` — 9 opportunity types, Why KaboomKlub section, media kit + proposal CTAs
-- [x] `/submit` — 6 submission types with editorial guidelines
-- [x] `/contact` — full inquiry form (name/company/email/phone/service/budget/timeline/description)
-- [x] `/newsletter` — The Kaboomklub Brief signup, coverage breakdown, sponsorship CTA
-- [x] `/about` — mission, categories, 9 media formats, 7-platform ecosystem, Fish Art X + 9JA Lifestyle, media kit
-- [x] `/search` — `SearchClient` (client component, live query + category filter) + server page
-
-### Build Output (September 1, 2026)
-- ✅ Compiled successfully (Turbopack)
-- ✅ TypeScript — 0 errors (strict mode)
-- ✅ 47 static/PPR pages generated — 0 build errors
-- Routes: `/`, `/_not-found`, `/about`, `/advertise`, `/artists`, `/artists/[slug]` ×3, `/business`, `/category/[slug]` ×5, `/contact`, `/culture`, `/entertainment`, `/events`, `/features`, `/music`, `/newsletter`, `/playlists`, `/search`, `/services`, `/stories`, `/story/[slug]` ×15, `/submit`, `/video`
-
-### Known Limitations / Future Work
-- Images: Only 2 real images in `/public/`. All non-featured posts use logo as placeholder. Real photography needed.
-- Body content: Posts have 3-paragraph body arrays. Real editorial content needed.
-- Newsletter: Form submits to placeholder — needs backend (e.g. Mailchimp, ConvertKit) integration.
-- Contact/Submit forms: Static UI — needs backend or form service (e.g. Formspree, Resend) integration.
-- Search: Client-side in-memory search — adequate for current scale. May need Algolia/Typesense at scale.
-- Artist profiles: 3 seed artists. Needs expansion into full database.
-- Events: 2 seed events. Needs regular updates.
-- Video: Placeholder structure — needs real YouTube/video embed integration.
-- Font: Loaded via next/font/google — requires internet on first build.
+Typography: Inter; headlines black uppercase tight tracking; labels 10px font-black uppercase 0.25em tracking; body regular/medium relaxed leading. Utility classes `kk-label/section-title/headline/trending-scroll/newsletter-input` etc.
 
 ---
 
-## 14. SEO & DISCOVERABILITY
+## 11. COMMERCIAL ARCHITECTURE
 
-- All pages have `metadata` exports with title, description
-- Dynamic pages use `generateMetadata` for per-post/per-artist SEO
-- All story pages have `seoTitle` and `seoDescription` fields
-- `generateStaticParams` used on all dynamic routes for static generation
-- URL structure: clean, semantic slugs throughout
-- Category pages are independently discoverable
-- Artist profile pages are independently discoverable
+10 services no prices → contact inquiry; services `/contact?service=… Advertise `/advertise`; Submit `/submit` music/press/artist spot etc. CTA: Get A Quote / Request This / Book / Work / Partner / Proposal / Submit Music. Pricing language: "Pricing is tailored to the scope of each project."
 
 ---
 
-## 15. FUTURE EXPANSION READINESS
+## 12. SEO & DISCOVERABILITY
 
-The architecture supports future addition of:
-- Podcasts section
-- Original video shows
-- Awards / Kaboomklub recognitions
-- Community features
-- Digital publications / long-form PDF downloads
-- Kaboomklub Sessions (live/performance content)
-- Event ticketing integration
-- Music streaming previews (embedded Spotify/Apple Music)
-- Multi-author support (author profiles page)
-- Tagging system improvements (tag index pages)
+- Metadata title template description + metadataBase + OG/Twitter/keywords already implemented; dynamic `generateMetadata` for story artist; story generateMetadata per-post;
+
+- **sitemap.xml** `app/sitemap.ts` all 19 static + 5 category + published stories & artists + playlists events videos; lastmod freq/priority
+- **robots.txt** `app/robots.ts allow / disallow admin; Sitemap: host
+- **JSON-LD**:
+  - Organization (layout: name url logo description social links in head
+  - Website + SearchAction target /search?q= home
+  - NewsArticle (story page: headline description image author datePublished dateModified publisher keywords
+  - EventList (events page: ItemList Event
+- **alt default alt text; canonical via alt="" fallback;
+- heading hierarchies semantic HTML
+- **URL** clean semantic
+- category pages independently discoverable;
 
 ---
 
-*Last updated: September 1, 2026*
-*Status: Full implementation complete — production build passing, 47 pages, 0 errors*
-*Framework: Next.js 16.2.6 App Router*
+## 13. ANALYTICS
+
+GA4 conditional. Root layout app/layout.tsx injects `<Script strategy="afterInteractive"` afterInteractive:
+```
+if NEXT_PUBLIC_GA_MEASUREMENT_ID set:
+- gtag src from googletagmanager + init anonymize_ip true
+
+If env not not loaded.
+```
+
+Lightweight no packages; no duplicate systems existing analytics added.
+
+---
+
+## 14. SECURITY
+
+- **Secrets: Cloudinary API secret MongoDB credentials server-side; never browser; env vars only.
+- **Admin delete auth ordering requireSession BEFORE CDN calls. Empty uploadedBy does NOT allow arbitrary deletes; only superadmin manages orphan media ownership bypass ownership check runs CDN calls.
+- **Upload validation file ext/mime/size before Cloudinary.
+- **Import SSRF guard protocol private host; probe declared size check; actual size destroy if exceeded; no private network blocked.
+- **External URLs unoptimized next/image**; prevent crashes caused whitelist only.
+- **Zod server validation server action input before Mongo writes.
+- **middleware edge route gate + requireSession application double layer.
+- **Error messages no stack secrets/logs secrets; try/catch DB safely public pages empty states.
+
+---
+
+## 15. PERFORMANCE
+
+- **Media Library pagination 24/page newest-first; unbounded queries eliminated
+- **Cloudinary thumbnail transforms c_fill w480 h320
+- PublicImage sizes default next/image Cloudinary CDN allowlist; lazy loading unless priority
+- **External URLs unoptimized=true avoid optimizer allowlist
+- Inter font-display swap
+- cacheComponents + Suspense boundaries Next 16
+- Server components default; minimal client only MediaSelector SearchClient Navbar Footer
+
+---
+
+## 16. DEPLOYMENT
+
+- **Vercel Next.js project auto-deploy GitHub main
+- **MongoDB Atlas MONGODB_URI
+- **Cloudinary v2 CLOUDINARY_CLOUD_NAME CLOUDINARY_API_KEY CLOUDINARY_API_SECRET
+- **Env vars**:
+  MONGODB_URI
+  CLOUDINARY_CLOUD_NAME CLOUDINARY_API_KEY CLOUDINARY_API_SECRET
+  SESSION_SECRET JWT signing secret (min 32 chars)
+  NEXT_PUBLIC_GA_MEASUREMENT_ID optional
+  NODE_ENV production Vercel
+  site url public site URL
+- **next.config.ts remotePatterns { protocol https hostname res.cloudinary.com
+
+---
+
+## 17. ENVIRONMENT VARIABLES
+
+Copy `.env.local.example` to `.env.local`. Never commit real values.
+
+| Variable | Required | Where used |
+|---|---|---|
+| `MONGODB_URI` | Yes | MongoDB Atlas connection lib/db.ts |
+| `CLOUDINARY_CLOUD_NAME` | Yes | Upload/Import/Media deletion |
+| `CLOUDINARY_API_KEY` | Yes | Cloudinary signing |
+| `CLOUDINARY_API_SECRET` | Yes | Server-only NEVER client |
+| `SESSION_SECRET` | Yes | JWT admin session signing min 32 chars |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | No | GA4 if present enable analytics |
+| `NODE_ENV` | Vercel auto | `production` on Vercel |
+
+---
+
+## 18. ACCESSIBILITY
+
+Semantic HTML heading hierarchy alt text labels focus states form labels links semantic nav keyboard accessible accessible
+
+---
+
+## 19. KNOWN LIMITATIONS
+
+- Real photography placeholder logo fallback still used in DB image="" if editors save without image; PublicImage fallback logo fallback rendered only at render time.
+- Seed artist/event/playlist/video counts depend seed content grows production.
+- Forms server newsletter integrate ESP integration required live emails (form integrations optional not scope
+- Search client query adequate current scale; scale upgrade necessary future.
+- Font next/font/google internet build first required connectivity connection needed fonts available.
+
+---
+
+## 20. LAUNCH CHECKLIST
+
+Before launch verify:
+
+- [x] TypeScript tsc --noEmit clean
+- [x] Production npm run build clean
+- [x] Media upload Cloudinary Media Library paginated
+- [x] 5-mode MediaSelector integrated forms
+- [x] Internet import SSRF guarded
+- [x] External URLs unoptimized safe rendering
+- [x] No Image empty DB actions
+- [x] Media delete auth correct superadmin orphan
+- [x] Videos revalidate /videos not /video
+- [x] Post delete story/category revalidated
+- [x] sitemap.xml /robots.txt SEO files
+- [x] JSON-LD 4 schemas Organization/Website/NewsArticle/EventList
+- [x] GA4 conditional NEXT_PUBLIC_GA_MEASUREMENT_ID
+- [x] Next/Image Cloudinary allowlist only safe external
+- [x] Env vars secrets server no client bundles
+- [x] Git tracked clean secrets .gitignore
+- [ ] Vercel env configured
+- [ ] MongoDB Atlas network/IP configured
+- [ ] Cloudinary env vars
+- [x] PROJECT_BIBLE up to date
+- [ ] Browser smoke tests: home / categories / stories / story / artists / playlists / videos / events / search / forms / admin login+upload
+
+---
+
+*Last updated: 2026-09-09*
+
+*Status: Production build passing. tsc clean. Platform complete & launch ready.*
+*Framework: Next.js 16.2.6 App Router (Turbopack)

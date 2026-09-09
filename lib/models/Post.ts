@@ -58,7 +58,7 @@ const PostSchema = new Schema<IPost>(
     date: { type: String, default: "" },
     updatedDate: { type: String, default: "" },
     readTime: { type: String, default: "3 MIN READ" },
-    image: { type: String, default: "/kaboom-logo.jpg" },
+    image: { type: String, default: "" },
     imageCaption: { type: String, default: "" },
     priority: { type: String, enum: ["MAJOR", "SECONDARY", "SIDEBAR"], default: "SECONDARY" },
     featured: { type: Boolean, default: false },

@@ -21,7 +21,7 @@ const PlaylistSchema = new Schema<IPlaylist>(
     description: { type: String, default: "" },
     platform: { type: String, default: "Spotify" },
     href: { type: String, default: "" },
-    image: { type: String, default: "/kaboom-logo.jpg" },
+    image: { type: String, default: "" },
     cadence: { type: String, default: "Updated Regularly" },
     featured: { type: Boolean, default: false },
     status: { type: String, enum: ["PUBLISHED", "DRAFT", "ARCHIVED"], default: "DRAFT" },

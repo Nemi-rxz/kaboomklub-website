@@ -26,7 +26,7 @@ const EventSchema = new Schema<IEvent>(
     artists: [{ type: String }],
     organizer: { type: String, default: "KaboomKlub" },
     href: { type: String, default: "" },
-    image: { type: String, default: "/kaboom-logo.jpg" },
+    image: { type: String, default: "" },
     featured: { type: Boolean, default: false },
     status: { type: String, enum: ["PUBLISHED", "DRAFT", "ARCHIVED"], default: "DRAFT" },
   },

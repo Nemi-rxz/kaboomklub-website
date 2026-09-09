@@ -15,7 +15,7 @@ const Schema = z.object({
   title: z.string().min(1, "Title required"),
   slug: z.string().optional(),
   description: z.string().default(""),
-  thumbnail: z.string().default("/kaboom-logo.jpg"),
+  thumbnail: z.string().default(""),
   platform: z.enum(["YouTube", "Instagram", "TikTok", "Other"]).default("YouTube"),
   videoUrl: z.string().default(""),
   embedUrl: z.string().default(""),
@@ -34,10 +34,10 @@ export async function saveVideoAction(id: string | null, _prev: VideoFormState, 
   const d = parsed.data;
   const slug = d.slug?.trim() || slugify(d.title);
   await connectDB();
-  const doc = { slug, title: d.title, description: d.description, thumbnail: d.thumbnail || "/kaboom-logo.jpg", platform: d.platform, videoUrl: d.videoUrl, embedUrl: d.embedUrl, category: d.category, relatedArtist: d.relatedArtist || undefined, featured: d.featured === "true" || d.featured === "on", status: d.status };
+  const doc = { slug, title: d.title, description: d.description, thumbnail: d.thumbnail, platform: d.platform, videoUrl: d.videoUrl, embedUrl: d.embedUrl, category: d.category, relatedArtist: d.relatedArtist || undefined, featured: d.featured === "true" || d.featured === "on", status: d.status };
   if (id && id !== "new") await VideoModel.findByIdAndUpdate(id, doc);
   else await VideoModel.create(doc);
-  revalidatePath("/video");
+  revalidatePath("/videos");
   redirect("/admin/videos");
 }
 
@@ -45,5 +45,5 @@ export async function deleteVideoAction(id: string): Promise<void> {
   await requireSession();
   await connectDB();
   await VideoModel.findByIdAndDelete(id);
-  revalidatePath("/video");
+  revalidatePath("/videos");
 }

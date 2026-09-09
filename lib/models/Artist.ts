@@ -29,7 +29,7 @@ const ArtistSchema = new Schema<IArtist>(
     bio: { type: String, default: "" },
     genre: { type: String, default: "" },
     location: { type: String, default: "" },
-    image: { type: String, default: "/kaboom-logo.jpg" },
+    image: { type: String, default: "" },
     latestRelease: { type: String },
     socialLinks: {
       instagram: String,

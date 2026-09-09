@@ -20,7 +20,7 @@ const Schema = z.object({
   artists: z.string().default(""),
   organizer: z.string().default("KaboomKlub"),
   href: z.string().default(""),
-  image: z.string().default("/kaboom-logo.jpg"),
+  image: z.string().default(""),
   featured: z.string().optional(),
   status: z.enum(["PUBLISHED", "DRAFT", "ARCHIVED"]).default("DRAFT"),
 });
@@ -35,7 +35,7 @@ export async function saveEventAction(id: string | null, _prev: EventFormState, 
   const slug = d.slug?.trim() || slugify(d.name);
   const artists = d.artists.split(",").map((a) => a.trim()).filter(Boolean);
   await connectDB();
-  const doc = { slug, name: d.name, date: d.date, location: d.location, description: d.description, artists, organizer: d.organizer, href: d.href, image: d.image || "/kaboom-logo.jpg", featured: d.featured === "true" || d.featured === "on", status: d.status };
+  const doc = { slug, name: d.name, date: d.date, location: d.location, description: d.description, artists, organizer: d.organizer, href: d.href, image: d.image, featured: d.featured === "true" || d.featured === "on", status: d.status };
   if (id && id !== "new") await EventModel.findByIdAndUpdate(id, doc);
   else await EventModel.create(doc);
   revalidatePath("/events");

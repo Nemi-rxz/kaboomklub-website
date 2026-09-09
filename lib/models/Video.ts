@@ -21,7 +21,7 @@ const VideoSchema = new Schema<IVideo>(
     slug: { type: String, required: true, unique: true, trim: true, lowercase: true },
     title: { type: String, required: true, trim: true },
     description: { type: String, default: "" },
-    thumbnail: { type: String, default: "/kaboom-logo.jpg" },
+    thumbnail: { type: String, default: "" },
     platform: { type: String, enum: ["YouTube", "Instagram", "TikTok", "Other"], default: "YouTube" },
     videoUrl: { type: String, default: "" },
     embedUrl: { type: String, default: "" },

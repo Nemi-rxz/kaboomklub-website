@@ -3,6 +3,7 @@ import EditorialFooter from "@/components/EditorialFooter";
 import EditorialNavbar from "@/components/EditorialNavbar";
 import MajorHeadline from "@/components/MajorHeadline";
 import PostCard from "@/components/PostCard";
+import WebsiteLd from "@/components/seo/WebsiteLd";
 import {
   categories,
   getFeaturedPost,
@@ -17,7 +18,7 @@ import {
 export default async function Home() {
   const featuredPost = await getFeaturedPost();
   if (!featuredPost) {
-    return <><EditorialNavbar /><main className="flex min-h-[60vh] items-center justify-center bg-[#f7f3ea] px-6 text-center"><p className="text-lg font-black uppercase text-[#17120c]/40">Stories are coming soon.</p></main><EditorialFooter /></>;
+    return <><WebsiteLd /><EditorialNavbar /><main className="flex min-h-[60vh] items-center justify-center bg-[#f7f3ea] px-6 text-center"><p className="text-lg font-black uppercase text-[#17120c]/40">Stories are coming soon.</p></main><EditorialFooter /></>;
   }
   const publicSiteConfig = await getPublicSiteConfig();
   const latestPosts = (await getLatestPosts(9)).filter((p) => p.slug !== featuredPost.slug);
@@ -30,6 +31,7 @@ export default async function Home() {
 
   return (
     <>
+      <WebsiteLd />
       <EditorialNavbar />
       <main className="bg-[#f7f3ea] text-[#17120c]">
 

@@ -5,6 +5,7 @@ import EditorialFooter from "@/components/EditorialFooter";
 import EditorialNavbar from "@/components/EditorialNavbar";
 import PostCard from "@/components/PostCard";
 import { getEvents, getPostsByCategory } from "@/lib/posts";
+import EventListLd from "@/components/seo/EventListLd";
 
 export const metadata: Metadata = {
   title: "Events",
@@ -16,8 +17,19 @@ export default async function EventsPage() {
   const events = await getEvents();
   const entertainmentPosts = (await getPostsByCategory("entertainment")).slice(0, 3);
 
+  const items = events.map((e) => ({
+    name: e.name,
+    url: e.href || undefined,
+    startDate: e.date || undefined,
+    locationName: e.location || undefined,
+    image: e.image || undefined,
+    description: e.description || undefined,
+    organizerName: e.organizer || undefined,
+  }));
+
   return (
     <>
+      <EventListLd items={items} />
       <EditorialNavbar />
       <main className="bg-[#f7f3ea] text-[#17120c]">
 

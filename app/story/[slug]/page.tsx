@@ -4,8 +4,9 @@ import { notFound } from "next/navigation";
 import EditorialFooter from "@/components/EditorialFooter";
 import EditorialNavbar from "@/components/EditorialNavbar";
 import PostCard from "@/components/PostCard";
-import { getPostBySlug, getPosts, getPostsByCategory } from "@/lib/posts";
+import { getPostBySlug, getPosts, getPostsByCategory, getSiteSettings } from "@/lib/posts";
 import PublicImage from "@/components/PublicImage";
+import NewsArticleLd from "@/components/seo/NewsArticleLd";
 
 type StoryPageProps = {
   params: Promise<{ slug: string }>;
@@ -44,8 +45,31 @@ export default async function StoryPage({ params }: StoryPageProps) {
     .filter((item) => item.slug !== post.slug)
     .slice(0, 3);
 
+  let settings: Awaited<ReturnType<typeof getSiteSettings>> = null;
+  try { settings = await getSiteSettings(); } catch { settings = null; }
+  const s = settings as Record<string, any> | null;
+  const siteUrl = (s && typeof s.siteUrl === "string" && s.siteUrl.trim()) || "https://kaboomklub.com";
+  const canonical = `${siteUrl.replace(/\/$/, "")}/story/${post.slug}`;
+
+  const logoUrl = s && typeof s.logoUrl === "string" && s.logoUrl.trim().length > 0
+    ? /^https?:\/\//i.test(s.logoUrl)
+      ? s.logoUrl
+      : `${siteUrl.replace(/\/$/, "")}${s.logoUrl.startsWith("/") ? "" : "/"}${s.logoUrl}`
+    : undefined;
+
   return (
     <>
+      <NewsArticleLd
+        title={post.title}
+        description={post.seoDescription || post.excerpt || post.title}
+        url={canonical}
+        image={post.socialImage || post.image || undefined}
+        authorName={post.author || undefined}
+        datePublished={post.date || undefined}
+        dateModified={post.updatedDate || undefined}
+        publisherLogo={logoUrl}
+        keywords={post.tags || []}
+      />
       <EditorialNavbar />
       <main className="bg-[#f7f3ea] text-[#17120c]">
 

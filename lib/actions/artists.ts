@@ -17,7 +17,7 @@ const ArtistSchema = z.object({
   bio: z.string().default(""),
   genre: z.string().default(""),
   location: z.string().default(""),
-  image: z.string().default("/kaboom-logo.jpg"),
+  image: z.string().default(""),
   latestRelease: z.string().optional(),
   instagram: z.string().default(""),
   spotify: z.string().default(""),
@@ -48,7 +48,7 @@ export async function saveArtistAction(
   await connectDB();
   const doc = {
     slug, name: d.name, bio: d.bio, genre: d.genre, location: d.location,
-    image: d.image || "/kaboom-logo.jpg",
+    image: d.image,
     latestRelease: d.latestRelease || undefined,
     socialLinks: { instagram: d.instagram, spotify: d.spotify, youtube: d.youtube, twitter: d.twitter, tiktok: d.tiktok },
     tags, featured: d.featured === "true" || d.featured === "on", status: d.status,

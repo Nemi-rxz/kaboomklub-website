@@ -67,7 +67,7 @@ const PostSchema = z.object({
   author: z.string().default("KABOOMKLUB TEAM"),
   authorRole: z.string().default("Editorial Desk"),
   readTime: z.string().default("3 MIN READ"),
-  image: z.string().default("/kaboom-logo.jpg"),
+  image: z.string().default(""),
   imageCaption: z.string().default(""),
 
   priority: z
@@ -141,7 +141,7 @@ export async function savePostAction(
     date: formatDate(now),
     updatedDate: formatDate(now),
     readTime: data.readTime,
-    image: data.image || "/kaboom-logo.jpg",
+    image: data.image,
     imageCaption: data.imageCaption,
     priority: data.priority,
     featured:
@@ -155,7 +155,7 @@ export async function savePostAction(
     socialImage:
       data.socialImage ||
       data.image ||
-      "/kaboom-logo.jpg",
+      "",
     publishedAt:
       data.status === "PUBLISHED"
         ? now
@@ -184,11 +184,14 @@ export async function deletePostAction(
   await requireSession();
 
   await connectDB();
+  const target = await PostModel.findById(id).select("slug category").lean();
 
   await PostModel.findByIdAndDelete(id);
 
   revalidatePath("/");
   revalidatePath("/stories");
+  if (target?.slug) revalidatePath(`/story/${target.slug}`);
+  if (target?.category) revalidatePath(`/category/${String(target.category).toLowerCase()}`);
 }
 
 export async function togglePostStatusAction(
