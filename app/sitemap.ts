@@ -10,7 +10,7 @@ import {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const config = await getPublicSiteConfig();
-  const base = (config.baseUrl?.trim() || "https://kaboomklub.com").replace(/\/$/, "");
+  const base = (config.baseUrl?.trim() || "https://www.kaboomklub.com").replace(/\/$/, "");
   const now = new Date();
 
   const staticPaths = [

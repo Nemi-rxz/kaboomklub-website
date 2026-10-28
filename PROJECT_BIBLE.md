@@ -24,7 +24,7 @@ Kaboomklub is a modern African digital media platform. Music is the strongest id
 
 ## 2. STRATEGIC DIRECTION
 
-| Instagram / TikTok / Social | Website (kaboomklub.com) |
+| Instagram / TikTok / Social | Website (www.kaboomklub.com) |
 |---|---|
 | Discovery | Full stories |
 | Short-form content | Original journalism |

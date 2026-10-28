@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 const platforms = [
-  { name: "Website", handle: "kaboomklub.com", href: "/", desc: "The central digital home — full stories, features, artist profiles, playlists, events and original editorial." },
+  { name: "Website", handle: "www.kaboomklub.com", href: "/", desc: "The central digital home — full stories, features, artist profiles, playlists, events and original editorial." },
   { name: "Instagram", handle: "@kaboomklub", href: "https://www.instagram.com/kaboomklub/", desc: "Discovery, short-form content, artist promotion, breaking news, community and conversation." },
   { name: "TikTok", handle: "@kaboomklub", href: "https://www.tiktok.com/@kaboomklub", desc: "Short-form video, music discovery, cultural moments and viral content." },
   { name: "X / Twitter", handle: "@kaboomklub", href: "https://x.com/kaboomklub", desc: "Industry conversation, music commentary, news and real-time reactions." },

@@ -3,7 +3,7 @@ import { getPublicSiteConfig } from "@/lib/posts";
 
 export default async function robots(): Promise<MetadataRoute.Robots> {
   const config = await getPublicSiteConfig();
-  const base = (config.baseUrl?.trim() || "https://kaboomklub.com").replace(/\/$/, "");
+  const base = (config.baseUrl?.trim() || "https://www.kaboomklub.com").replace(/\/$/, "");
   return {
     rules: [
       {

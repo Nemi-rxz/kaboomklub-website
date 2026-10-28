@@ -34,7 +34,7 @@ export default function EditorialNavbar() {
         {/* Main bar */}
         <div className="mx-auto flex max-w-[1600px] items-center justify-between px-6 py-3 sm:px-10 lg:px-16">
           {/* Logo */}
-          <Link href="/" className="flex shrink-0 items-center gap-3">
+          <Link href="/" className="mr-10 flex shrink-0 items-center gap-3">
             <Image
               src="/kaboom-logo.jpg"
               alt="KaboomKlub"
@@ -49,11 +49,13 @@ export default function EditorialNavbar() {
 
           {/* Desktop primary nav */}
           <div className="hidden items-center gap-6 xl:flex">
-            {primaryNav.map((item) => (
+            {primaryNav.map((item, index) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="text-[11px] font-black uppercase tracking-[0.18em] text-[#17120c]/65 transition-colors hover:text-[#b3241b]"
+                className={`text-[11px] font-black uppercase tracking-[0.18em] text-[#17120c]/65 transition-colors hover:text-[#b3241b] ${
+                  index === 0 ? "ml-4" : ""
+                }`}
               >
                 {item.label}
               </Link>

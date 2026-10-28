@@ -53,7 +53,7 @@ async function OrgLd() {
 
   const siteUrl =
     (settings && typeof (settings as any)?.siteUrl === "string" && (settings as any).siteUrl.trim()) ||
-    "https://kaboomklub.com";
+    "https://www.kaboomklub.com";
 
   const s = settings as Record<string, any> | null;
   const socialCandidates = s

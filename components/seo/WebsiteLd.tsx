@@ -2,7 +2,7 @@ type Props = {
   siteUrl?: string;
 };
 
-export default function WebsiteLd({ siteUrl = "https://kaboomklub.com" }: Props) {
+export default function WebsiteLd({ siteUrl = "https://www.kaboomklub.com" }: Props) {
   const data = {
     "@context": "https://schema.org",
     "@type": "WebSite",

@@ -175,7 +175,7 @@ export default async function StoryPage({ params }: StoryPageProps) {
             <div className="flex gap-3">
               <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#17120c]/35">Share:</span>
               <Link
-                href={`https://x.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(`https://kaboomklub.com/story/${post.slug}`)}`}
+                href={`https://x.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(`https://www.kaboomklub.com/story/${post.slug}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[10px] font-black uppercase tracking-[0.18em] text-[#17120c]/50 transition-colors hover:text-[#17120c]"

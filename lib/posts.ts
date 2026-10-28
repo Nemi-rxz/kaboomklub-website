@@ -14,7 +14,7 @@ export const siteConfig = {
   name: "KaboomKlub",
   tagline: "African Music, Culture, Business & Entertainment",
   handle: "@kaboomklub",
-  baseUrl: "https://kaboomklub.com",
+  baseUrl: "https://www.kaboomklub.com",
   newsletterName: "The Kaboomklub Brief",
   newsletterDescription: "The week in African music, culture, business and entertainment — delivered to your inbox.",
   mission: "Discover the music, people, ideas and stories shaping Africa's culture and creative economy.",

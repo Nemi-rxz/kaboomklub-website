@@ -8,7 +8,7 @@ type Props = {
 
 export default function OrganizationLd({
   siteName = "KaboomKlub",
-  siteUrl = "https://kaboomklub.com",
+  siteUrl = "https://www.kaboomklub.com",
   logo,
   description,
   socialLinks = [],

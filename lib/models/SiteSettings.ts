@@ -49,7 +49,7 @@ const SiteSettingsSchema = new Schema<ISiteSettings>(
     youtube: { type: String, default: "https://www.youtube.com/@kaboomklub" },
     spotify: { type: String, default: "https://open.spotify.com/" },
     facebook: { type: String, default: "" },
-    siteUrl: { type: String, default: "https://kaboomklub.com" },
+    siteUrl: { type: String, default: "https://www.kaboomklub.com" },
     defaultSeoTitle: { type: String, default: "KaboomKlub — African Music, Culture, Business & Entertainment" },
     defaultSeoDescription: { type: String, default: "Discover the music, people, ideas and stories shaping Africa's culture and creative economy." },
     defaultSocialImage: { type: String, default: "/kaboom-logo.jpg" },
