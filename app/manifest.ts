@@ -12,9 +12,10 @@ export default function manifest(): MetadataRoute.Manifest {
     theme_color: "#b3241b",
     icons: [
       {
-        src: "/icon.jpg",
-        sizes: "768x768",
+        src: "/kaboomklub-icon.jpg",
+        sizes: "828x828",
         type: "image/jpeg",
+        purpose: "any",
       },
     ],
   };

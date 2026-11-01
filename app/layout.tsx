@@ -19,14 +19,11 @@ export const metadata: Metadata = {
   },
   description:
     "Discover the music, people, ideas and stories shaping Africa's culture and creative economy. KaboomKlub covers African music, Afrobeats, entertainment, culture, and business.",
-  metadataBase: new URL("https://kaboomklub.com"),
+  metadataBase: new URL("https://www.kaboomklub.com"),
   icons: {
-    icon: [
-      { url: "/site-icon-48.png", sizes: "48x48", type: "image/png" },
-      { url: "/site-icon-96.png", sizes: "96x96", type: "image/png" },
-      { url: "/site-icon-192.png", sizes: "192x192", type: "image/png" },
-    ],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+    icon: [{ url: "/kaboomklub-icon.jpg", type: "image/jpeg" }],
+    shortcut: [{ url: "/kaboomklub-icon.jpg", type: "image/jpeg" }],
+    apple: [{ url: "/kaboomklub-icon.jpg", type: "image/jpeg" }],
   },
   openGraph: {
     siteName: "KaboomKlub",
@@ -34,9 +31,9 @@ export const metadata: Metadata = {
     locale: "en_US",
     images: [
       {
-        url: "/site-icon-512.png",
-        width: 512,
-        height: 512,
+        url: "/kaboomklub-icon.jpg",
+        width: 828,
+        height: 828,
         alt: "KaboomKlub — African Music, Culture, Business & Entertainment",
       },
     ],
@@ -44,7 +41,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     site: "@kaboomklub",
-    images: ["/site-icon-512.png"],
+    images: ["/kaboomklub-icon.jpg"],
   },
   keywords: [
     "African music",

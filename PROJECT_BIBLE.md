@@ -269,6 +269,25 @@ Colors globals.css
 
 Typography: Inter; headlines black uppercase tight tracking; labels 10px font-black uppercase 0.25em tracking; body regular/medium relaxed leading. Utility classes `kk-label/section-title/headline/trending-scroll/newsletter-input` etc.
 
+### Brand assets & icons
+
+Single source of truth for the brand icon: `public/kaboomklub-icon.jpg` — the official KaboomKlub artwork, committed byte-for-byte as supplied by the owner (828×828 JPEG, no centre-crop, no resize, no re-encode).
+
+Every icon slot points at that one file:
+
+| Reference | File | Emits |
+|---|---|---|
+| `metadata.icons.icon` / `.shortcut` / `.apple` | `app/layout.tsx` | `<link rel="icon">`, `<link rel="shortcut icon">`, `<link rel="apple-touch-icon">` |
+| `metadata.openGraph.images` / `metadata.twitter.images` | `app/layout.tsx` | `og:image`, `twitter:image` |
+| `icons[0].src` | `app/manifest.ts` | PWA / Android home-screen icon |
+| `faviconUrl` / `defaultSocialImage` | `lib/models/SiteSettings.ts` | CMS defaults |
+
+`app/favicon.ico` was deliberately deleted. It was the untouched Create Next App default (the Vercel/Next logo) and browsers preferred it over the brand icon; there is now no competing icon file in `app/`, so the brand artwork wins.
+
+Header, footer and the JSON-LD Organization logo continue to use `public/kaboom-logo.jpg` — that is the wordmark, separate from the app/share icon.
+
+Known limitations: the file is a JPEG, which all current browsers accept for `rel="icon"`. iOS is stricter about `apple-touch-icon` and prefers PNG, so a PNG variant would need to be re-encoded from the artwork. The Vercel **project avatar** is dashboard-only (Settings → General → Project Avatar) and cannot be set from the repo.
+
 ---
 
 ## 11. COMMERCIAL ARCHITECTURE
@@ -280,6 +299,7 @@ Typography: Inter; headlines black uppercase tight tracking; labels 10px font-bl
 ## 12. SEO & DISCOVERABILITY
 
 - Metadata title template description + metadataBase + OG/Twitter/keywords already implemented; dynamic `generateMetadata` for story artist; story generateMetadata per-post;
+- **Icons**: single brand file `public/kaboomklub-icon.jpg` drives `metadata.icons` (icon/shortcut/apple), `metadata.openGraph.images`, `metadata.twitter.images` and the PWA manifest. `app/favicon.ico` (the Create Next App default) has been removed so no default icon competes with the brand artwork.
 
 - **sitemap.xml** `app/sitemap.ts` all 19 static + 5 category + published stories & artists + playlists events videos; lastmod freq/priority
 - **robots.txt** `app/robots.ts allow / disallow admin; Sitemap: host
